@@ -3,26 +3,24 @@ services:
     image: postgres:17
     restart: unless-stopped
     environment:
-      POSTGRES_USER: prod
-      POSTGRES_PASSWORD: prod
+      POSTGRES_USER: dev
+      POSTGRES_PASSWORD: dev
       POSTGRES_DB: attic_promo
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
-      - prod-promo-bot-network
+      - dev-promo-bot-network
   bot:
-    depends_on:
-      - db
     build:
       context: .
     restart: unless-stopped
     volumes:
-      - "./src:/usr/src/src"
+      - ".:/usr/src"
     env_file:
-      - .env.production
+      - .env.dev
     command: npm run dev
     networks:
-      - prod-promo-bot-network
+      - dev-promo-bot-network
 networks:
   dev-promo-bot-network:
     driver: bridge

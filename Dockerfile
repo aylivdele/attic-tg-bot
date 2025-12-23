@@ -31,5 +31,4 @@ COPY . .
 USER node
 
 # Start the app
-EXPOSE 80
 CMD ["node", "--import", "tsx", "./src/main.ts"]
