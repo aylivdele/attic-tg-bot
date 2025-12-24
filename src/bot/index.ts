@@ -2,12 +2,11 @@ import type { Context } from '#root/bot/context.js'
 import type { Config } from '#root/config.js'
 import type { Logger } from '#root/logger.js'
 import type { BotConfig } from 'grammy'
-import { adminFeature } from '#root/bot/features/admin.js'
-import { languageFeature } from '#root/bot/features/language.js'
+import { casesFeature } from '#root/bot/features/cases.js'
 import { unhandledFeature } from '#root/bot/features/unhandled.js'
 import { welcomeFeature } from '#root/bot/features/welcome.js'
 import { errorHandler } from '#root/bot/handlers/error.js'
-import { i18n, isMultipleLocales } from '#root/bot/i18n.js'
+import { i18n } from '#root/bot/i18n.js'
 import { dbMiddleware } from '#root/bot/middlewares/db.js'
 import { session } from '#root/bot/middlewares/session.js'
 import { updateLogger } from '#root/bot/middlewares/update-logger.js'
@@ -66,9 +65,7 @@ export function createBot(token: string, dependencies: Dependencies, botConfig?:
 
   // Handlers
   protectedBot.use(welcomeFeature)
-  protectedBot.use(adminFeature)
-  if (isMultipleLocales)
-    protectedBot.use(languageFeature)
+  protectedBot.use(casesFeature)
 
   // must be the last handler
   protectedBot.use(unhandledFeature)

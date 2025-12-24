@@ -6,9 +6,10 @@ COPY package*.json ./
 
 RUN npm ci
 
-COPY . .
-
 FROM base AS dev
+
+COPY eslint.config.js ./
+COPY tsconfig.json ./
 
 USER node
 
