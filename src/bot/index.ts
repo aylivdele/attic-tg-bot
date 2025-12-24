@@ -8,6 +8,7 @@ import { unhandledFeature } from '#root/bot/features/unhandled.js'
 import { welcomeFeature } from '#root/bot/features/welcome.js'
 import { errorHandler } from '#root/bot/handlers/error.js'
 import { i18n, isMultipleLocales } from '#root/bot/i18n.js'
+import { dbMiddleware } from '#root/bot/middlewares/db.js'
 import { session } from '#root/bot/middlewares/session.js'
 import { updateLogger } from '#root/bot/middlewares/update-logger.js'
 import { autoChatAction } from '@grammyjs/auto-chat-action'
@@ -41,6 +42,9 @@ export function createBot(token: string, dependencies: Dependencies, botConfig?:
 
     await next()
   })
+
+  // attach database to context
+  bot.use(dbMiddleware())
 
   const protectedBot = bot.errorBoundary(errorHandler)
 

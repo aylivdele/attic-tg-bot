@@ -6,6 +6,7 @@ import type { RunnerHandle } from '@grammyjs/runner'
 import process from 'node:process'
 import { createBot } from '#root/bot/index.js'
 import { config } from '#root/config.js'
+import { closeDatabase, initDatabase } from '#root/database/index.js'
 import { logger } from '#root/logger.js'
 import { createServer, createServerManager } from '#root/server/index.js'
 import { run } from '@grammyjs/runner'
@@ -86,6 +87,13 @@ async function startWebhook(config: WebhookConfig) {
 }
 
 try {
+  await initDatabase()
+
+  // ensure DB is closed on shutdown
+  onShutdown(async () => {
+    await closeDatabase()
+  })
+
   if (config.isWebhookMode)
     await startWebhook(config)
   else if (config.isPollingMode)

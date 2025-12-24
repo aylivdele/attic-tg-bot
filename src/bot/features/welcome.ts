@@ -1,5 +1,7 @@
 import type { Context } from '#root/bot/context.js'
 import { logHandle } from '#root/bot/helpers/logging.js'
+import { createStartKeyboard } from '#root/bot/keyboards/start.js'
+import { insertNewUser } from '#root/database/queries.js'
 import { Composer } from 'grammy'
 
 const composer = new Composer<Context>()
@@ -7,7 +9,16 @@ const composer = new Composer<Context>()
 const feature = composer.chatType('private')
 
 feature.command('start', logHandle('command-start'), (ctx) => {
-  return ctx.reply(ctx.t('welcome'))
+  return insertNewUser(ctx.from, ctx.db)
+    .then(() => ctx.reply(`Отлично, давай определимся, что тебе сейчас ближе 👇
+
+— Крипто-школа - для базового понимания криптовалют 
+— Трейдинг-курс - самостоятельно торгуй и зарабатывай уже через месяц
+— Сигналы - входи в сделки по сигналам профи
+— Торговые роботы - автоматизиуй трейдинг, ты спишь, а твои деньги работают 10% в месяц
+— Партнерская программа - зарабатывай 11.000RUB за каждого приглашенного друга
+
+Если хочешь связаться со мной лично и сразу обсудить детали - нажимай «Хочу пообщаться лично»`, { reply_markup: createStartKeyboard(ctx) }))
 })
 
 export { composer as welcomeFeature }

@@ -3,11 +3,12 @@ services:
     image: postgres:17
     restart: unless-stopped
     environment:
-      POSTGRES_USER: prod
-      POSTGRES_PASSWORD: prod
-      POSTGRES_DB: attic_promo
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./db-init-scripts:/docker-entrypoint-initdb.d/
     networks:
       - prod-promo-bot-network
   bot:
@@ -15,16 +16,15 @@ services:
       - db
     build:
       context: .
+      dockerfile: docker/prod/Dockerfile
     restart: unless-stopped
-    volumes:
-      - "./src:/usr/src/src"
     env_file:
-      - .env.production
-    command: npm run dev
+      - .env
+    command: npm run prod
     networks:
       - prod-promo-bot-network
 networks:
-  dev-promo-bot-network:
+  prod-promo-bot-network:
     driver: bridge
 volumes:
   postgres_data:

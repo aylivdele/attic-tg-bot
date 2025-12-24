@@ -5,6 +5,7 @@ import type { HydrateFlavor } from '@grammyjs/hydrate'
 import type { I18nFlavor } from '@grammyjs/i18n'
 import type { ParseModeFlavor } from '@grammyjs/parse-mode'
 import type { Context as DefaultContext, SessionFlavor } from 'grammy'
+import type { Database } from '../database/index.js'
 
 export interface SessionData {
   // field?: string;
@@ -13,6 +14,7 @@ export interface SessionData {
 interface ExtendedContextFlavor {
   logger: Logger
   config: Config
+  db: Database
 }
 
 export type Context = ParseModeFlavor<
