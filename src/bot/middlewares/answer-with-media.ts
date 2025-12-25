@@ -129,7 +129,11 @@ async function answerWithMedia(ctx: Context, text: string, messageId: string | C
   // } catch (e) {
   //   ctx.logger.error('Failed to remove media from message:', e)
   // }
-  return ctx.editMessageText(text || 'Выберите дальнейшее действие', { reply_markup: keyboard })
+  if (!!ctx.update.message?.text || !!ctx.update.callback_query?.message?.text) {
+    return ctx.editMessageText(text || 'Выберите дальнейшее действие', { reply_markup: keyboard })
+  }
+  await ctx.editMessageReplyMarkup(undefined)
+  return ctx.reply(text || 'Выберите дальнейшее действие', { reply_markup: keyboard })
 }
 
 export function answerWithMediaMiddleware(): Middleware<Context> {

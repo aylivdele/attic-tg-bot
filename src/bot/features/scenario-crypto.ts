@@ -1,0 +1,74 @@
+import type { Context } from '#root/bot/context.js'
+import { cryptoBootcampCallbackData, cryptoSummaryCallbackData, scenarioCryptoCallbackData } from '#root/bot/callback-data/callbacks-crypto.js'
+import { cryptoBootcampKeyboard, mainCryptoKeyboard } from '#root/bot/keyboards/crypto-keyboards.js'
+import { updateUserState } from '#root/database/queries.js'
+import { Composer } from 'grammy'
+
+const composer = new Composer<Context>()
+
+const feature = composer.chatType('private')
+
+feature
+  .callbackQuery(scenarioCryptoCallbackData, async (ctx) => {
+    await ctx.answerCallbackQuery()
+    await updateUserState(ctx.from.id, scenarioCryptoCallbackData, ctx.db)
+    return ctx.answerWithMedia(`🎓 CRYPTO COURSE - Это база по крипторынку
+6 модулей, 18 уроков:  
+— как устроены биржи и инструменты;  
+— как безопасно хранить средства;  
+— как открывать первые сделки без ошибок;  
+— как избежать типичных сливов новичков.  
+Курс делает так, что тема крипты перестаёт быть «страшной» и становится понятной.
+
+Смотри прямо сейчас. Через 24 часа доступ будет закрыт`, scenarioCryptoCallbackData, mainCryptoKeyboard())
+  })
+
+feature
+  .callbackQuery(cryptoSummaryCallbackData, async (ctx) => {
+    await ctx.answerCallbackQuery()
+  })
+
+const bootcamp1 = `${cryptoBootcampCallbackData}1`
+const bootcamp2 = `${cryptoBootcampCallbackData}2`
+const bootcamp3 = `${cryptoBootcampCallbackData}3`
+
+feature.callbackQuery(cryptoBootcampCallbackData, async (ctx) => {
+  await ctx.answerCallbackQuery()
+  await updateUserState(ctx.from.id, cryptoBootcampCallbackData, ctx.db)
+  return ctx.answerWithMedia(`Чтобы получить доступ к школе по крипте и начать обучение, выполни несколько простых шагов 👇
+
+1. Зарегистрируйся на сайте ATTIC по моей ссылке:
+https://atticalgo.com?promocode=DlAdyKE0SK
+
+*Регистрация именно по этой ссылке откроет доступ к скидке на курсы и другие продукты компании`, cryptoBootcampCallbackData, cryptoBootcampKeyboard(scenarioCryptoCallbackData, bootcamp1))
+})
+
+feature.callbackQuery(bootcamp1, async (ctx) => {
+  await ctx.answerCallbackQuery()
+  await updateUserState(ctx.from.id, bootcamp1, ctx.db)
+  return ctx.answerWithMedia(`2. Войди в личный кабинет и открой раздел “Продукты → COURSES”.
+
+3. Перейди к оплате и активируй курс.`, bootcamp1, cryptoBootcampKeyboard(cryptoBootcampCallbackData, bootcamp2))
+})
+
+feature.callbackQuery(bootcamp2, async (ctx) => {
+  await ctx.answerCallbackQuery()
+  await updateUserState(ctx.from.id, bootcamp2, ctx.db)
+  return ctx.answerWithMedia(`4. Зарегистрируйся на бирже BingX по специальной ссылке:
+https://bingx.com/partner/attic/`, bootcamp2, cryptoBootcampKeyboard(bootcamp1, bootcamp3))
+})
+
+feature.callbackQuery(bootcamp3, async (ctx) => {
+  await ctx.answerCallbackQuery()
+  await updateUserState(ctx.from.id, bootcamp3, ctx.db)
+  return ctx.answerWithMedia(`5. В личном кабинете ATTIC зайди в “Настройки → Биржи” и добавь свой UID
+(его можно найти в профиле BingX)
+
+Готово! ✅
+
+🖥️ После покупки тебе откроются модули и уроки полностью. Обучение проходит прямо в личном кабинете ATTIC, без сторонних платформ.
+
+Если хочешь - напиши мне лично, и я помогу пройти все шаги и быстрее втянуться в нишу.`, bootcamp3, cryptoBootcampKeyboard(bootcamp2))
+})
+
+export { composer as scenarioCryptoFeature }

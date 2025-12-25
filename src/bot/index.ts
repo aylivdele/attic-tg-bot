@@ -6,7 +6,11 @@ import type { BotConfig } from 'grammy'
 import { casesFeature } from '#root/bot/features/cases-edit.js'
 import { casesLoopFeature } from '#root/bot/features/cases-loop.js'
 import { directMessageFeature } from '#root/bot/features/direct-message.js'
+import { scenarioCryptoFeature } from '#root/bot/features/scenario-crypto.js'
+import { scenarioPartnershipFeature } from '#root/bot/features/scenario-partnership.js'
 import { scenarioRobotsFeature } from '#root/bot/features/scenario-robots.js'
+import { scenarioSignalsFeature } from '#root/bot/features/scenario-signals.js'
+import { scenarioTradingFeature } from '#root/bot/features/scenario-trading.js'
 import { unhandledFeature } from '#root/bot/features/unhandled.js'
 import { welcomeFeature } from '#root/bot/features/welcome.js'
 import { errorHandler } from '#root/bot/handlers/error.js'
@@ -71,9 +75,13 @@ export function createBot(token: string, dependencies: Dependencies, botConfig?:
   // Handlers
   protectedBot.use(welcomeFeature)
   protectedBot.use(casesFeature)
+  protectedBot.use(casesLoopFeature)
   protectedBot.use(directMessageFeature)
   protectedBot.use(scenarioRobotsFeature)
-  protectedBot.use(casesLoopFeature)
+  protectedBot.use(scenarioSignalsFeature)
+  protectedBot.use(scenarioCryptoFeature)
+  protectedBot.use(scenarioTradingFeature)
+  protectedBot.use(scenarioPartnershipFeature)
 
   // must be the last handler
   protectedBot.use(unhandledFeature)

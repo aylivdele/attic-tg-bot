@@ -1,5 +1,7 @@
+import { cryptoCasesCallbackData } from '#root/bot/callback-data/callbacks-crypto.js'
 import { robotsCasesCallbackData } from '#root/bot/callback-data/callbacks-robots.js'
 import { signalsCasesCallbackData } from '#root/bot/callback-data/callbacks-signals.js'
+import { tradingCasesCallbackData } from '#root/bot/callback-data/callbacks-trading.js'
 
 export const editCasesCallbackData = 'edit_cases'
 export const editRobotsCallbackData = 'cases_robots'
@@ -36,9 +38,9 @@ export function mapEditCaseCallbackToLoopCallback(callbackData: string) {
     case editSignalsCallbackData:
       return signalsCasesCallbackData
     case editCryptoSchoolCallbackData:
-      return 'cases_loop_crypto_school'
+      return cryptoCasesCallbackData
     case editTradingCourseCallbackData:
-      return 'cases_loop_trading_course'
+      return tradingCasesCallbackData
     default:
       throw new Error('Неизвестный раздел!')
   }
