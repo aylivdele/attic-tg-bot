@@ -1,12 +1,16 @@
-import type { Context } from '#root/bot/context.js'
+import type { Context, SessionData } from '#root/bot/context.js'
+
 import type { Config } from '#root/config.js'
 import type { Logger } from '#root/logger.js'
 import type { BotConfig } from 'grammy'
-import { casesFeature } from '#root/bot/features/cases.js'
+import { casesFeature } from '#root/bot/features/cases-edit.js'
+import { casesLoopFeature } from '#root/bot/features/cases-loop.js'
+import { directMessageFeature } from '#root/bot/features/direct-message.js'
+import { scenarioRobotsFeature } from '#root/bot/features/scenario-robots.js'
 import { unhandledFeature } from '#root/bot/features/unhandled.js'
 import { welcomeFeature } from '#root/bot/features/welcome.js'
 import { errorHandler } from '#root/bot/handlers/error.js'
-import { i18n } from '#root/bot/i18n.js'
+import { answerWithMediaMiddleware } from '#root/bot/middlewares/answer-with-media.js'
 import { dbMiddleware } from '#root/bot/middlewares/db.js'
 import { session } from '#root/bot/middlewares/session.js'
 import { updateLogger } from '#root/bot/middlewares/update-logger.js'
@@ -46,6 +50,7 @@ export function createBot(token: string, dependencies: Dependencies, botConfig?:
   bot.use(dbMiddleware())
 
   const protectedBot = bot.errorBoundary(errorHandler)
+  protectedBot.use(answerWithMediaMiddleware())
 
   // Middlewares
   bot.api.config.use(parseMode('HTML'))
@@ -59,13 +64,16 @@ export function createBot(token: string, dependencies: Dependencies, botConfig?:
   protectedBot.use(hydrate())
   protectedBot.use(session({
     getSessionKey,
-    storage: new MemorySessionStorage(),
+    storage: new MemorySessionStorage<SessionData>(1000 * 60 * 60 * 24),
   }))
-  protectedBot.use(i18n)
+  // protectedBot.use(i18n)
 
   // Handlers
   protectedBot.use(welcomeFeature)
   protectedBot.use(casesFeature)
+  protectedBot.use(directMessageFeature)
+  protectedBot.use(scenarioRobotsFeature)
+  protectedBot.use(casesLoopFeature)
 
   // must be the last handler
   protectedBot.use(unhandledFeature)

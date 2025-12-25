@@ -86,3 +86,41 @@ export function saveCaseByUser(userId: number, db: Database) {
 export function deleteUnsavedCasesByUser(userId: number, db: Database) {
   return db.query('DELETE FROM cases WHERE creater_id = $1 AND saved = FALSE', [userId])
 }
+
+export function getNextCase(db: Database, section: string, lastCaseId: number = -1): Promise<Case | null> {
+  return db.query(
+    'SELECT * FROM cases WHERE topic = $1 AND id > $2 AND saved = TRUE ORDER BY id ASC LIMIT 1',
+    [section, lastCaseId],
+  ).then((res) => {
+    if (res.rows.length === 0) {
+      return db.query(
+        'SELECT * FROM cases WHERE topic = $1 AND saved = TRUE ORDER BY id ASC LIMIT 1',
+        [section],
+      ).then((res) => {
+        if (res.rows.length === 0) {
+          return null
+        }
+        return res.rows[0]
+      })
+    }
+    return res.rows[0]
+  })
+}
+
+// CREATE TABLE media (
+//     id SERIAL PRIMARY KEY,
+//     message_id TEXT NOT NULL,
+//     media_type TEXT NOT NULL,
+//     file_id TEXT NOT NULL
+// );
+
+export interface MessageMedia {
+  id: number
+  message_id: string
+  media_type: string
+  file_id: string
+}
+
+export function getMediaForMessage(messageId: string, db: Database): Promise<MessageMedia[]> {
+  return db.query('SELECT * FROM media WHERE message_id = $1', [messageId]).then(res => res.rows ?? [])
+}

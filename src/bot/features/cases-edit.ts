@@ -1,5 +1,5 @@
 import type { Context } from '#root/bot/context.js'
-import { deleteAudioCallbackData, deleteAudionoteCallbackData, deleteCaptionCallbackData, deletePhotoCallbackData, deleteVideoCallbackData, deleteVideonoteCallbackData, editCasesCallbackData, editCryptoSchoolCallbackData, editRobotsCallbackData, editSignalsCallbackData, editTradingCourseCallbackData, getSectionName, saveCaseCallbackData, viewCaseContentCallbackData } from '#root/bot/callback-data/edit-cases.js'
+import { deleteAudioCallbackData, deleteAudionoteCallbackData, deleteCaptionCallbackData, deletePhotoCallbackData, deleteVideoCallbackData, deleteVideonoteCallbackData, editCasesCallbackData, editCryptoSchoolCallbackData, editRobotsCallbackData, editSignalsCallbackData, editTradingCourseCallbackData, getSectionName, mapEditCaseCallbackToLoopCallback, saveCaseCallbackData, viewCaseContentCallbackData } from '#root/bot/callback-data/cases-edit.js'
 import { createMainCasesKeyboard, createStartingCasesKeyboard } from '#root/bot/keyboards/cases-keyboard.js'
 import { deleteUnsavedCasesByUser, getUnsavedCaseByUser, getUserStates, insertNewCase, saveCaseByUser, updateCaseByUser, updateUserState } from '#root/database/queries.js'
 import { Composer } from 'grammy'
@@ -23,7 +23,7 @@ feature.callbackQuery(editCasesCallbackData, async (ctx) => {
 
 feature.callbackQuery([editRobotsCallbackData, editSignalsCallbackData, editCryptoSchoolCallbackData, editTradingCourseCallbackData], async (ctx) => {
   await ctx.answerCallbackQuery()
-  await insertNewCase(ctx.callbackQuery.data, ctx.from.id, ctx.db)
+  await insertNewCase(mapEditCaseCallbackToLoopCallback(ctx.callbackQuery.data), ctx.from.id, ctx.db)
   await updateUserState(ctx.from.id, editCasesCallbackData, ctx.db)
   const newCase = await getUnsavedCaseByUser(ctx.from.id, ctx.db)
   return ctx.editMessageText(`Выбранный раздел: ${getSectionName(ctx.callbackQuery.data)}

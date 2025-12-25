@@ -1,3 +1,6 @@
+import { robotsCasesCallbackData } from '#root/bot/callback-data/callbacks-robots.js'
+import { signalsCasesCallbackData } from '#root/bot/callback-data/callbacks-signals.js'
+
 export const editCasesCallbackData = 'edit_cases'
 export const editRobotsCallbackData = 'cases_robots'
 export const editSignalsCallbackData = 'cases_signals'
@@ -24,4 +27,19 @@ export function getSectionName(callbackData: string) {
       return 'Трейдинг-курс'
   }
   throw new Error('Неизвестный раздел!')
+}
+
+export function mapEditCaseCallbackToLoopCallback(callbackData: string) {
+  switch (callbackData) {
+    case editRobotsCallbackData:
+      return robotsCasesCallbackData
+    case editSignalsCallbackData:
+      return signalsCasesCallbackData
+    case editCryptoSchoolCallbackData:
+      return 'cases_loop_crypto_school'
+    case editTradingCourseCallbackData:
+      return 'cases_loop_trading_course'
+    default:
+      throw new Error('Неизвестный раздел!')
+  }
 }

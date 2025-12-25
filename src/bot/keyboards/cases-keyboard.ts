@@ -1,5 +1,5 @@
 import type { Case } from '#root/database/queries.js'
-import { deleteAudioCallbackData, deleteAudionoteCallbackData, deleteCaptionCallbackData, deletePhotoCallbackData, deleteVideoCallbackData, deleteVideonoteCallbackData, editCasesCallbackData, editCryptoSchoolCallbackData, editRobotsCallbackData, editSignalsCallbackData, editTradingCourseCallbackData, saveCaseCallbackData, viewCaseContentCallbackData } from '#root/bot/callback-data/edit-cases.js'
+import { deleteAudioCallbackData, deleteAudionoteCallbackData, deleteCaptionCallbackData, deletePhotoCallbackData, deleteVideoCallbackData, deleteVideonoteCallbackData, editCasesCallbackData, editCryptoSchoolCallbackData, editRobotsCallbackData, editSignalsCallbackData, editTradingCourseCallbackData, saveCaseCallbackData, viewCaseContentCallbackData } from '#root/bot/callback-data/cases-edit.js'
 import { InlineKeyboard } from 'grammy'
 
 export function createStartingCasesKeyboard() {
@@ -41,5 +41,12 @@ export async function createMainCasesKeyboard(newCase?: Case | null) {
   }
   return InlineKeyboard.from([
     [{ text: 'Сменить раздел', callback_data: editCasesCallbackData }],
+  ])
+}
+
+export function createCaseKeyboard(casesSection: string, menuData: string) {
+  return InlineKeyboard.from([
+    [{ text: 'Следующий кейс', callback_data: casesSection }],
+    [{ text: '↩ В меню', callback_data: menuData }],
   ])
 }
