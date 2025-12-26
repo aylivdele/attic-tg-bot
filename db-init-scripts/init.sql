@@ -6,11 +6,6 @@ CREATE TABLE cases (
     topic TEXT NOT NULL,
     creater_id BIGINT NOT NULL,
     caption TEXT,
-    videonote TEXT,
-    video TEXT,
-    photo TEXT,
-    audionote TEXT,
-    audio TEXT,
     saved BOOLEAN DEFAULT FALSE
 );
 
@@ -20,7 +15,8 @@ CREATE TABLE users (
     first_name TEXT,
     last_name TEXT,
     username TEXT,
-    added_at TIMESTAMPTZ DEFAULT NOW(),
+    added_at BIGINT,
+    last_update BIGINT,
     previous_state TEXT,
     current_state TEXT
 );
@@ -50,3 +46,6 @@ CREATE TABLE media (
     media_type TEXT NOT NULL,
     file_id TEXT NOT NULL
 );
+
+CREATE INDEX idx_media_message_id_bigint
+ON media ((message_id::BIGINT));

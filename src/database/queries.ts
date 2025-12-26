@@ -1,5 +1,6 @@
 import type { Database } from '#root/database/index.js'
 import type { User } from '@grammyjs/types'
+import { startMenuCallbackData } from '#root/bot/callback-data/callbacks-start.js'
 import { getBotId } from '#root/bot/helpers/botId.js'
 
 // CREATE TABLE cases (
@@ -23,30 +24,42 @@ import { getBotId } from '#root/bot/helpers/botId.js'
 //     last_name TEXT,
 //     username TEXT,
 //     added_at TIMESTAMPTZ DEFAULT NOW(),
+//     last_update TIMESTAMPTZ DEFAULT NOW(),
 //     last_state TEXT,
 //     current_state TEXT
 // );
 
+export interface UserRecord {
+  id: number
+  bot_id: number
+  first_name: string | null
+  last_name: string | null
+  username: string | null
+  added_at: number
+  last_update: number
+  previous_state: string | null
+  current_state: string | null
+}
+
+export function getUserById(userId: number, db: Database): Promise<UserRecord | undefined> {
+  return db.query('select * from users u where u.id = $1 and u.bot_id = $2', [userId, getBotId()]).then((res) => {
+    if (res.rows.length === 0) {
+      return undefined
+    }
+    return res.rows[0]
+  })
+}
+
 export function insertNewUser(from: User, db: Database) {
   return db.query(
-    `INSERT INTO users (id, bot_id, first_name, last_name, username, current_state)
-         VALUES ($1, $2, $3, $4, $5, $6) on conflict (id, bot_id) do update set current_state = EXCLUDED.current_state`,
-    [from.id, getBotId(), from.first_name, from.last_name, from.username, 'start'],
+    `INSERT INTO users (id, bot_id, first_name, last_name, username, current_state, previous_state, added_at, last_update)
+         VALUES ($1, $2, $3, $4, $5, $6, $6, $7, $7) on conflict (id, bot_id) do update set current_state = EXCLUDED.current_state`,
+    [from.id, getBotId(), from.first_name, from.last_name, from.username, startMenuCallbackData, Date.now()],
   )
 }
 
-export function updateUserState(userId: number, state: string, db: Database) {
-  return db.query('UPDATE users SET current_state = $1 WHERE id = $2 and bot_id = $3', [state, userId, getBotId()])
-}
-
-export async function getUserStates(userId: number, db: Database): Promise<{ current_state: string, previous_state: string } | null> {
-  const res = await db.query('SELECT current_state, previous_state FROM users WHERE id = $1 and bot_id = $2', [userId, getBotId()])
-  if (res.rows.length === 0) {
-    return null
-  }
-  else {
-    return { current_state: res.rows[0].current_state, previous_state: res.rows[0].previous_state }
-  }
+export function updateUserInfo(user: UserRecord, db: Database) {
+  return db.query('update users set current_state = $1, previous_state = $2, last_update =$3 where id = $4 and bot_id = $5', [user.current_state, user.previous_state, user.last_update, user.id, user.bot_id])
 }
 
 export interface Case {
@@ -54,12 +67,8 @@ export interface Case {
   bot_id: number
   topic: string
   caption: string | null
-  videonote: string | null
-  video: string | null
-  photo: string | null
-  audionote: string | null
-  audio: string | null
   saved: boolean
+  media_count: number
 }
 
 export async function insertNewCase(topic: string, userId: number, db: Database): Promise<number> {
@@ -70,13 +79,21 @@ export async function insertNewCase(topic: string, userId: number, db: Database)
 }
 
 export async function getUnsavedCaseByUser(userId: number, db: Database): Promise<Case | null> {
-  const res = await db.query('SELECT * FROM cases WHERE creater_id = $1 AND saved = FALSE ORDER BY id DESC LIMIT 1', [userId])
+  const res = await db.query('SELECT c.*, count (m.id) as media_count FROM cases c LEFT JOIN media m ON m.message_id::BIGINT = c.id WHERE c.creater_id = $1 AND c.saved = FALSE GROUP BY c.id ORDER BY id DESC LIMIT 1', [userId])
   return res?.rows?.[0] ?? null
 }
 
 export function updateCaseByUser(userId: number, mediaField: 'videonote' | 'video' | 'photo' | 'audionote' | 'audio' | 'caption', fileId: string | null, db: Database) {
-  const queryText = `UPDATE cases SET ${mediaField} = $1 WHERE creater_id = $2 AND saved = FALSE`
-  return db.query(queryText, [fileId, userId])
+  if (mediaField === 'caption') {
+    const queryText = `UPDATE cases SET ${mediaField} = $1 WHERE creater_id = $2 AND saved = FALSE`
+    return db.query(queryText, [fileId, userId])
+  }
+
+  return db.query('insert into media(message_id, media_type, file_id) values ((select id from cases where creater_id = $1 and saved = FALSE for update), $2, $3)', [userId, mediaField, fileId])
+}
+
+export function deleteLastUnsavedCaseMedia(userId: number, db: Database) {
+  return db.query('delete from media where id = (select id from media where message_id = (select id from cases where creater_id = $1 and saved = FALSE order by id DESC limit 1 for update)::TEXT order by id DESC limit 1 for update)', [userId])
 }
 
 export function saveCaseByUser(userId: number, db: Database) {

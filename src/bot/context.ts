@@ -1,5 +1,5 @@
 import type { Config } from '#root/config.js'
-import type { Case } from '#root/database/queries.js'
+import type { UserRecord } from '#root/database/queries.js'
 import type { Logger } from '#root/logger.js'
 import type { AutoChatActionFlavor } from '@grammyjs/auto-chat-action'
 import type { HydrateFlavor } from '@grammyjs/hydrate'
@@ -11,14 +11,16 @@ import type { Database } from '../database/index.js'
 export interface SessionData {
   // field?: string;
   lastCasesId: Record<string, number>
+  userInfo?: UserRecord
 }
 
 interface ExtendedContextFlavor {
   logger: Logger
   config: Config
   db: Database
-  answerWithMedia: (text: string, messageId: string, keyboard: InlineKeyboard) => Promise<any>
-  answerWithCase: (media: Case, keyboard: InlineKeyboard) => Promise<any>
+  answerWithMedia: (messageId: string, text?: string | null, keyboard?: InlineKeyboard, leaveLastMessage?: boolean) => Promise<any>
+  notifyAdmin: (text: string) => Promise<any>
+  updateUserState: (newState: string) => void
 }
 
 export type Context = ParseModeFlavor<

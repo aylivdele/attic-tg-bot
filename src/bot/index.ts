@@ -16,6 +16,7 @@ import { welcomeFeature } from '#root/bot/features/welcome.js'
 import { errorHandler } from '#root/bot/handlers/error.js'
 import { answerWithMediaMiddleware } from '#root/bot/middlewares/answer-with-media.js'
 import { dbMiddleware } from '#root/bot/middlewares/db.js'
+import { notificationsMiddleware } from '#root/bot/middlewares/notifications.js'
 import { session } from '#root/bot/middlewares/session.js'
 import { updateLogger } from '#root/bot/middlewares/update-logger.js'
 import { autoChatAction } from '@grammyjs/auto-chat-action'
@@ -51,10 +52,8 @@ export function createBot(token: string, dependencies: Dependencies, botConfig?:
   })
 
   // attach database to context
-  bot.use(dbMiddleware())
 
   const protectedBot = bot.errorBoundary(errorHandler)
-  protectedBot.use(answerWithMediaMiddleware())
 
   // Middlewares
   bot.api.config.use(parseMode('HTML'))
@@ -71,6 +70,9 @@ export function createBot(token: string, dependencies: Dependencies, botConfig?:
     storage: new MemorySessionStorage<SessionData>(1000 * 60 * 60 * 24),
   }))
   // protectedBot.use(i18n)
+  protectedBot.use(dbMiddleware())
+  protectedBot.use(answerWithMediaMiddleware())
+  protectedBot.use(notificationsMiddleware())
 
   // Handlers
   protectedBot.use(welcomeFeature)

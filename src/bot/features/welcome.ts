@@ -10,6 +10,9 @@ const composer = new Composer<Context>()
 const feature = composer.chatType('private')
 
 feature.command(startMenuCallbackData, logHandle('command-start'), (ctx) => {
+  if (!ctx.session.userInfo) {
+    ctx.notifyAdmin(`Новый пользователь в боте: @${ctx.from.username}`)
+  }
   return insertNewUser(ctx.from, ctx.db)
     .then(() => ctx.reply(`Отлично, давай определимся, что тебе сейчас ближе 👇
 
