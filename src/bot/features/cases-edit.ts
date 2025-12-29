@@ -1,5 +1,4 @@
 import type { Context } from '#root/bot/context.js'
-import type { MessageEntity } from '@grammyjs/types'
 import { deleteCaptionCallbackData, deleteMediaCallbackData, editCasesCallbackData, editCryptoSchoolCallbackData, editRobotsCallbackData, editSignalsCallbackData, editTradingCourseCallbackData, getSectionName, mapEditCaseCallbackToLoopCallback, saveCaseCallbackData, viewCaseContentCallbackData } from '#root/bot/callback-data/cases-edit.js'
 import { createMainCasesKeyboard, createStartingCasesKeyboard } from '#root/bot/keyboards/cases-keyboard.js'
 import { deleteLastUnsavedCaseMedia, deleteUnsavedCasesByUser, getUnsavedCaseByUser, insertNewCase, saveCaseByUser, updateCaseByUser } from '#root/database/queries.js'
@@ -29,24 +28,19 @@ feature.callbackQuery([editRobotsCallbackData, editSignalsCallbackData, editCryp
   ctx.updateUserState(editCasesCallbackData)
   const newCase = await getUnsavedCaseByUser(ctx.from.id, ctx.db)
   const sectionName = getSectionName(ctx.callbackQuery.data)
-  const text = `Выбранный раздел: ${sectionName}
+  const text = `*Выбранный раздел*: _${sectionName}_
 → Добавление нового кейса ←
 
 — Отправьте медиафайлы/голосовые/кругляшки или сообщения, которые будут добавлены в кейс
-❗Отправляйте в порядке очереди, в которой они буду использованы ботом для отправки пользователю
+❗*Отправляйте в порядке очереди, в которой они буду использованы ботом для отправки пользователю*
 
 Все, что вы отправите в бота до того, пока не нажмете кнопку “Сохранить кейс” будет сохранено как один кейс.
 
 — Отправляйте в бота необходимую информацию по кейсу, далее нажимайте “Сохранить кейс”, после чего добавляйте информацию по следующему кейсу из выбранного раздела или выберите другой раздел
 
 — Если хотите сменить раздел добавления кейса, нажмите “Сменить раздел”`
-  const entities: MessageEntity[] = [{ type: 'bold', offset: 0, length: 17 }]
-  const substr = 'Отправляйте в порядке очереди, в которой они буду использованы ботом для отправки пользователю'
-  const index = text.indexOf(substr)
-  entities.push({ type: 'bold', offset: index, length: substr.length })
-  entities.push({ type: 'italic', offset: text.indexOf(sectionName), length: sectionName.length })
 
-  return ctx.editMessageText(text, { reply_markup: await createMainCasesKeyboard(newCase), entities })
+  return ctx.editMessageText(text, { reply_markup: await createMainCasesKeyboard(newCase), parse_mode: 'MarkdownV2' })
 })
 
 feature.on(['message:text', 'message:video_note', 'message:voice', 'message:video', 'message:photo', 'message:audio'], async (ctx, next) => {
