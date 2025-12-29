@@ -29,7 +29,7 @@ export function dbMiddleware(): Middleware<Context> {
     await next()
 
     if (ctx.session.userInfo) {
-      await updateUserInfo(ctx.session.userInfo, ctx.db)
+      await updateUserInfo({ ...ctx.session.userInfo, last_update: Date.now() }, ctx.db)
     }
   }
 }
