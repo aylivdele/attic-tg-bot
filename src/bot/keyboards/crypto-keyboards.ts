@@ -1,7 +1,6 @@
 import { cryptoBootcampCallbackData, cryptoCasesCallbackData, cryptoSummaryCallbackData, scenarioCryptoCallbackData } from '#root/bot/callback-data/callbacks-crypto.js'
 import { startMenuCallbackData } from '#root/bot/callback-data/callbacks-start.js'
 import { directMessageCallbackData, shortDirectMessageCallbackData } from '#root/bot/callback-data/direct-message.js'
-import { config } from '#root/config.js'
 import { InlineKeyboard } from 'grammy'
 
 export function mainCryptoKeyboard() {
@@ -24,6 +23,6 @@ export function cryptoBootcampKeyboard(previousState: string, nextState?: string
   return InlineKeyboard.from([
     [{ text: nextState ? 'Далее' : '🚀 В меню', callback_data: nextState ?? startMenuCallbackData }],
     [{ text: '↩ Назад', callback_data: scenarioCryptoCallbackData }],
-    [{ text: '💬 Написать мне', callback_data: shortDirectMessageCallbackData, url: `tg://resolve?domain=${config.botAdminUsername}` }],
+    [{ text: '💬 Написать мне', callback_data: shortDirectMessageCallbackData }],
   ])
 }

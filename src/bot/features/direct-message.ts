@@ -1,6 +1,7 @@
 import type { Context } from '#root/bot/context.js'
+import { startMenuCallbackData } from '#root/bot/callback-data/callbacks-start.js'
 import { directMessageCallbackData, shortDirectMessageCallbackData } from '#root/bot/callback-data/direct-message.js'
-import { directMessageKeyboard } from '#root/bot/keyboards/direct-message-keyboard.js'
+import { directMessageKeyboard, shortDirectMessageKeyboard } from '#root/bot/keyboards/direct-message-keyboard.js'
 import { Composer } from 'grammy'
 
 const composer = new Composer<Context>()
@@ -12,10 +13,11 @@ const feature = composer.chatType('private')
 feature.callbackQuery(directMessageCallbackData, async (ctx) => {
   ctx.notifyAdmin(`Пользователь хочет связаться лично для разбора всех нюансов: @${ctx.from.username}`)
   await ctx.answerCallbackQuery()
-  return ctx.editMessageText('Личный диалог - лучший формат, чтобы быстро и продуктивно во всём разобраться и найти для себя лучшую стратегию для старта', { reply_markup: directMessageKeyboard() })
+  return ctx.editMessageText(`📞 Мой телеграмм: @${ctx.config.botAdminUsername}\n\nЛичный диалог - лучший формат, чтобы быстро и продуктивно во всём разобраться и найти для себя лучшую стратегию для старта`, { reply_markup: directMessageKeyboard(ctx.config.botAdminUsername) })
 })
 
 feature.callbackQuery(shortDirectMessageCallbackData, async (ctx) => {
   ctx.notifyAdmin(`Пользователь хочет связаться лично для разбора всех нюансов: @${ctx.from.username}`)
-  return await ctx.answerCallbackQuery()
+  await ctx.answerCallbackQuery()
+  return ctx.editMessageText(`📞 Мой телеграмм: @${ctx.config.botAdminUsername}`, { reply_markup: shortDirectMessageKeyboard(ctx.session.userInfo?.current_state ?? startMenuCallbackData, ctx.config.botAdminUsername) })
 })

@@ -10,22 +10,22 @@ import { InlineKeyboard } from 'grammy'
 export function createStartKeyboard(_ctx: Context) {
   return InlineKeyboard.from([
     [
-      { text: 'Торговые роботы', callback_data: scenarioRobotsCallbackData },
+      { text: '🟢Торговые роботы', callback_data: scenarioRobotsCallbackData },
     ],
     [
-      { text: 'Сигналы', callback_data: scenarioSignalsCallbackData },
+      { text: '📈Сигналы', callback_data: scenarioSignalsCallbackData },
     ],
     [
-      { text: 'Крипто-школа', callback_data: scenarioCryptoCallbackData },
+      { text: '🎓Крипто-школа', callback_data: scenarioCryptoCallbackData },
     ],
     [
-      { text: 'Трейдинг-курс', callback_data: scenarioTradingCallbackData },
+      { text: '🎓Трейдинг-курс', callback_data: scenarioTradingCallbackData },
     ],
     [
-      { text: 'Партнерская сеть', callback_data: scenarioPartnershipCallbackData },
+      { text: '🤝Партнерская сеть', callback_data: scenarioPartnershipCallbackData },
     ],
     [
-      { text: 'Хочу пообщаться лично', callback_data: directMessageCallbackData },
+      { text: '💬Хочу пообщаться лично', callback_data: directMessageCallbackData },
     ],
   ])
 }
