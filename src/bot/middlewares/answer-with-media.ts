@@ -62,7 +62,7 @@ async function answerWithMedia(ctx: Context, messageId: string, text?: string | 
       }
     }
 
-    return ctx.reply((!skipText && !!text) ? text : 'Выберите дальнейшее действие', { reply_markup: keyboard, entities, link_preview_options: linkPreviewOptions })
+    return ctx.reply((!skipText && !!text) ? text : 'Выберите дальнейшее действие', { reply_markup: keyboard, entities, link_preview_options: linkPreviewOptions, parse_mode })
 
     //   if (media.length === 1) {
     //     const m = media[0]

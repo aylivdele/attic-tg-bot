@@ -18,13 +18,13 @@ feature.hears('Шалом, бот бот', async (ctx) => {
 
 feature.callbackQuery(editCasesCallbackData, async (ctx) => {
   await ctx.answerCallbackQuery()
-  await deleteUnsavedCasesByUser(ctx.from.id, ctx.db)
   ctx.updateUserState(editCasesCallbackData)
   return ctx.editMessageText(startMessage, { reply_markup: createStartingCasesKeyboard() })
 })
 
 feature.callbackQuery([editRobotsCallbackData, editSignalsCallbackData, editCryptoSchoolCallbackData, editTradingCourseCallbackData], async (ctx) => {
   await ctx.answerCallbackQuery()
+  await deleteUnsavedCasesByUser(ctx.from.id, ctx.db)
   await insertNewCase(mapEditCaseCallbackToLoopCallback(ctx.callbackQuery.data), ctx.from.id, ctx.db)
   ctx.updateUserState(editCasesCallbackData)
   const newCase = await getUnsavedCaseByUser(ctx.from.id, ctx.db)
