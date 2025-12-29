@@ -50,6 +50,3 @@ CREATE TABLE media (
     media_type TEXT NOT NULL,
     file_id TEXT NOT NULL
 );
-
-CREATE INDEX idx_media_message_id_bigint
-ON media ((message_id::BIGINT));

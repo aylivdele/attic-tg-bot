@@ -79,7 +79,7 @@ export async function insertNewCase(topic: string, userId: number, db: Database)
 }
 
 export async function getUnsavedCaseByUser(userId: number, db: Database): Promise<Case | null> {
-  const res = await db.query('SELECT c.*, count (m.id) as media_count FROM cases c LEFT JOIN media m ON m.message_id::BIGINT = c.id WHERE c.creater_id = $1 AND c.saved = FALSE and bot_id = $2 GROUP BY c.id ORDER BY id DESC LIMIT 1', [userId, getBotId()])
+  const res = await db.query('SELECT c.*, count (m.id) as media_count FROM cases c LEFT JOIN (select * from media where message_id ~ \'^[0-9]+$\') m ON m.message_id::BIGINT = c.id WHERE c.creater_id = $1 AND c.saved = FALSE and c.bot_id = $2 GROUP BY c.id ORDER BY id DESC LIMIT 1', [userId, getBotId()])
   return res?.rows?.[0] ?? null
 }
 
