@@ -10,7 +10,7 @@ CREATE TABLE cases (
 );
 
 CREATE TABLE users (
-    id BIGINT PRIMARY KEY,
+    id BIGINT NOT NULL,
     bot_id BIGINT NOT NULL,
     first_name TEXT,
     last_name TEXT,
@@ -20,6 +20,9 @@ CREATE TABLE users (
     previous_state TEXT,
     current_state TEXT
 );
+
+ALTER TABLE users
+ADD CONSTRAINT user_bot_id_pk PRIMARY KEY (id, bot_id);
 
 CREATE UNIQUE INDEX uniq_users_id_bot_id
 ON users (id, bot_id);

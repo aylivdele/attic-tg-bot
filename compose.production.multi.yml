@@ -1,0 +1,46 @@
+x-bot-base: &bot-base
+  depends_on:
+    - db
+  build:
+    context: .
+    dockerfile: docker/prod/Dockerfile
+  restart: unless-stopped
+  env_file:
+    - .env.multi
+  command: npm run prod
+  networks:
+    - prod-promo-bot-network
+services:
+  db:
+    image: postgres:17
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db-init-scripts:/docker-entrypoint-initdb.d/
+    networks:
+      - prod-promo-bot-network
+  bot-1:
+    <<: *bot-base
+    env_file:
+      .env.multi.1
+  bot-2:
+    <<: *bot-base
+    env_file:
+      .env.multi.2
+  bot-3:
+    <<: *bot-base
+    env_file:
+      .env.multi.3
+  bot-4:
+    <<: *bot-base
+    env_file:
+      .env.multi.4
+networks:
+  prod-promo-bot-network:
+    driver: bridge
+volumes:
+  postgres_data:

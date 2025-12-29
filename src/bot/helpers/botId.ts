@@ -1,5 +1,9 @@
 import { config } from '#root/config.js'
 
+let botId: string
 export function getBotId() {
-  return config.botToken.split(':')[0]
+  if (!botId) {
+    botId = config.botToken.split(':')[0]
+  }
+  return botId
 }

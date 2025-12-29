@@ -79,40 +79,40 @@ export async function insertNewCase(topic: string, userId: number, db: Database)
 }
 
 export async function getUnsavedCaseByUser(userId: number, db: Database): Promise<Case | null> {
-  const res = await db.query('SELECT c.*, count (m.id) as media_count FROM cases c LEFT JOIN media m ON m.message_id::BIGINT = c.id WHERE c.creater_id = $1 AND c.saved = FALSE GROUP BY c.id ORDER BY id DESC LIMIT 1', [userId])
+  const res = await db.query('SELECT c.*, count (m.id) as media_count FROM cases c LEFT JOIN media m ON m.message_id::BIGINT = c.id WHERE c.creater_id = $1 AND c.saved = FALSE and bot_id = $2 GROUP BY c.id ORDER BY id DESC LIMIT 1', [userId, getBotId()])
   return res?.rows?.[0] ?? null
 }
 
 export function updateCaseByUser(userId: number, mediaField: 'videonote' | 'video' | 'photo' | 'audionote' | 'audio' | 'caption', fileId: string | null, db: Database) {
   if (mediaField === 'caption') {
-    const queryText = `UPDATE cases SET ${mediaField} = $1 WHERE creater_id = $2 AND saved = FALSE`
-    return db.query(queryText, [fileId, userId])
+    const queryText = `UPDATE cases SET ${mediaField} = $1 WHERE creater_id = $2 AND saved = FALSE and bot_id = $3`
+    return db.query(queryText, [fileId, userId, getBotId()])
   }
 
-  return db.query('insert into media(message_id, media_type, file_id) values ((select id from cases where creater_id = $1 and saved = FALSE for update), $2, $3)', [userId, mediaField, fileId])
+  return db.query('insert into media(message_id, media_type, file_id) values ((select id from cases where creater_id = $1 and saved = FALSE AND bot_id = $4 for update), $2, $3)', [userId, mediaField, fileId, getBotId()])
 }
 
 export function deleteLastUnsavedCaseMedia(userId: number, db: Database) {
-  return db.query('delete from media where id = (select id from media where message_id = (select id from cases where creater_id = $1 and saved = FALSE order by id DESC limit 1 for update)::TEXT order by id DESC limit 1 for update)', [userId])
+  return db.query('delete from media where id = (select id from media where message_id = (select id from cases where creater_id = $1 and saved = FALSE and bot_id = $2 order by id DESC limit 1 for update)::TEXT order by id DESC limit 1 for update)', [userId, getBotId()])
 }
 
 export function saveCaseByUser(userId: number, db: Database) {
-  return db.query('UPDATE cases SET saved = TRUE WHERE creater_id = $1 AND saved = FALSE', [userId])
+  return db.query('UPDATE cases SET saved = TRUE WHERE creater_id = $1 AND bot_id = $2 AND saved = FALSE', [userId, getBotId()])
 }
 
 export function deleteUnsavedCasesByUser(userId: number, db: Database) {
-  return db.query('DELETE FROM cases WHERE creater_id = $1 AND saved = FALSE', [userId])
+  return db.query('DELETE FROM cases WHERE creater_id = $1 AND bot_id = $2 AND saved = FALSE', [userId, getBotId()])
 }
 
 export function getNextCase(db: Database, section: string, lastCaseId: number = -1): Promise<Case | null> {
   return db.query(
-    'SELECT * FROM cases WHERE topic = $1 AND id > $2 AND saved = TRUE ORDER BY id ASC LIMIT 1',
-    [section, lastCaseId],
+    'SELECT * FROM cases WHERE topic = $1 AND id > $2 AND saved = TRUE AND bot_id = $3 ORDER BY id ASC LIMIT 1',
+    [section, lastCaseId, getBotId()],
   ).then((res) => {
     if (res.rows.length === 0) {
       return db.query(
-        'SELECT * FROM cases WHERE topic = $1 AND saved = TRUE ORDER BY id ASC LIMIT 1',
-        [section],
+        'SELECT * FROM cases WHERE topic = $1 AND saved = TRUE AND bot_id = $2 ORDER BY id ASC LIMIT 1',
+        [section, getBotId()],
       ).then((res) => {
         if (res.rows.length === 0) {
           return null
