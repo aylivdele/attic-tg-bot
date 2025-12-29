@@ -89,11 +89,11 @@ export function updateCaseByUser(userId: number, mediaField: 'videonote' | 'vide
     return db.query(queryText, [fileId, userId, getBotId()])
   }
 
-  return db.query('insert into media(message_id, media_type, file_id) values ((select id from cases where creater_id = $1 and saved = FALSE AND bot_id = $4 for update), $2, $3)', [userId, mediaField, fileId, getBotId()])
+  return db.query('insert into media(message_id, media_type, file_id, bot_id) values ((select id from cases where creater_id = $1 and saved = FALSE AND bot_id = $4 for update), $2, $3, $4)', [userId, mediaField, fileId, getBotId()])
 }
 
 export function deleteLastUnsavedCaseMedia(userId: number, db: Database) {
-  return db.query('delete from media where id = (select id from media where message_id = (select id from cases where creater_id = $1 and saved = FALSE and bot_id = $2 order by id DESC limit 1 for update)::TEXT order by id DESC limit 1 for update)', [userId, getBotId()])
+  return db.query('delete from media where id = (select id from media where bot_id = $2 message_id = (select id from cases where creater_id = $1 and saved = FALSE and bot_id = $2 order by id DESC limit 1 for update)::TEXT order by id DESC limit 1 for update)', [userId, getBotId()])
 }
 
 export function saveCaseByUser(userId: number, db: Database) {
@@ -139,5 +139,5 @@ export interface MessageMedia {
 }
 
 export function getMediaForMessage(messageId: string, db: Database): Promise<MessageMedia[]> {
-  return db.query('SELECT * FROM media WHERE message_id = $1', [messageId]).then(res => res.rows ?? [])
+  return db.query('SELECT * FROM media WHERE message_id = $1 and bot_id = $2', [messageId, getBotId()]).then(res => res.rows ?? [])
 }
