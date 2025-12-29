@@ -97,8 +97,8 @@ export function createBot(token: string, dependencies: Dependencies, botConfig?:
           if (!res?.rows) {
             return
           }
-          for (const username of res.rows) {
-            bot.api.sendMessage(chatId, `Пользователь сутки не взаимодействовал в боте: @${username}`)
+          for (const row of res.rows) {
+            bot.api.sendMessage(chatId, `Пользователь сутки не взаимодействовал в боте: @${row.username}`)
           }
         })
     }
