@@ -12,12 +12,14 @@ feature
     await ctx.answerCallbackQuery()
     ctx.updateUserState(scenarioSignalsCallbackData)
     return ctx.answerWithMedia(scenarioSignalsCallbackData, `Посмотри видео и узнай: 
+
 — как зарабатывать на сигналах, не разбираясь в графиках
 — что такое сигналы простыми словами
 — готовая инструкция как открывать сделки
 — подойдет ли это новичку
 — с какой суммы можно начать
-Смотри прямо сейчас. Через 24 часа доступ будет закрыт`, { keyboard: mainSignalsKeyboard() })
+
+<b>Смотри прямо сейчас. Через 24 часа доступ будет закрыт</b>`, { keyboard: mainSignalsKeyboard(), parseMode: 'HTML' })
   })
 
 feature

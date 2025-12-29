@@ -1,5 +1,4 @@
 import type { Context } from '#root/bot/context.js'
-import type { MessageEntity } from '@grammyjs/types'
 import { robotsBootcampCallbackData, robotsStatisticsCallbackData, scenarioRobotsCallbackData, statisticsAIDescription, statisticsMDescription, statisticsRDescription } from '#root/bot/callback-data/callbacks-robots.js'
 import { mainRobotsKeyboard, robotsBootcampKeyboard, robotsStatisticsKeyboard } from '#root/bot/keyboards/robots-keyboards.js'
 import { Composer } from 'grammy'
@@ -12,13 +11,7 @@ feature
   .callbackQuery(scenarioRobotsCallbackData, async (ctx) => {
     await ctx.answerCallbackQuery()
     ctx.updateUserState(scenarioRobotsCallbackData)
-    return ctx.answerWithMedia(scenarioRobotsCallbackData, `Посмотри видео и узнай:\n\n— Как выстроить пассивный доход в крипте\n— Что такое торговые роботы простыми словами\n— Как вникнуть в топовое направление алготрейдинга\n— Подойдёт ли это новичку?\n\n❗Смотри прямо сейчас. Через 24 часа доступ будет закрыт`, { keyboard: mainRobotsKeyboard(), entities: [
-      {
-        offset: 191,
-        length: 54,
-        type: 'bold',
-      },
-    ] })
+    return ctx.answerWithMedia(scenarioRobotsCallbackData, `Посмотри видео и узнай:\n\n— Как выстроить пассивный доход в крипте\n— Что такое торговые роботы простыми словами\n— Как вникнуть в топовое направление алготрейдинга\n— Подойдёт ли это новичку?\n\n❗<b>Смотри прямо сейчас. Через 24 часа доступ будет закрыт</b>`, { keyboard: mainRobotsKeyboard(), parseMode: 'HTML' })
   })
 
 feature
@@ -27,96 +20,24 @@ feature
 
     await ctx.answerCallbackQuery()
     ctx.updateUserState(robotsStatisticsCallbackData)
-    const text = `Мы предоставляем портфель из 3х алгоритмов:
+    const text = `<b>Мы предоставляем портфель из 3х алгоритмов:</b>
 
-ATTIC - R (Resonance):
+💰<b>ATTIC - R (Resonance):</b>
 Доход за 11 месяцев 2025 года: +101.06%
-Верифицированная статистика
-Алгоритм на бирже BingX
+<a href="https://www.myfxbook.com/members/IceFXMarkets/resonance/11537820/UV4DGS56tm5bghbOZRjG">Верифицированная статистика</a>
+<a href="https://bingx.com/ru-ru/CopyTrading/1998800000066710?accountEnum=BINGX_SWAP_FUTURES&apiIdentity=1468422161599803396">Алгоритм на бирже BingX</a>
 
-ATTIC - Ai (Integral Ai)
+💰<b>ATTIC - Ai (Integral Ai)</b>
 Доход за 11 месяцев 2025 года: +79.59%
-Верифицированная статистика
-Алгоритм на бирже BingX
-ATTIC - M (Impulse)
-Доход за 11 месяцев 2025 года: +61.13%
-Верифицированная статистика
-Алгоритм на бирже BingX`
-    const entities: MessageEntity[] = [
-      {
-        offset: 0,
-        length: 43,
-        type: 'bold',
-      },
-      {
-        offset: 47,
-        length: 21,
-        type: 'bold',
-      },
-      {
-        offset: 105,
-        length: 8,
-        type: 'bold',
-      },
-      {
-        offset: 114,
-        length: 27,
-        type: 'text_link',
-        url: 'https://www.myfxbook.com/members/IceFXMarkets/resonance/11537820/UV4DGS56tm5bghbOZRjG',
-      },
-      {
-        offset: 142,
-        length: 23,
-        type: 'text_link',
-        url: 'https://bingx.com/ru-ru/CopyTrading/1998800000066710?accountEnum=BINGX_SWAP_FUTURES&apiIdentity=1468422161599803396',
-      },
-      {
-        offset: 169,
-        length: 24,
-        type: 'bold',
-      },
-      {
-        offset: 229,
-        length: 8,
-        type: 'bold',
-      },
-      {
-        offset: 238,
-        length: 27,
-        type: 'text_link',
-        url: 'https://www.myfxbook.com/members/IceFXMarkets/integral-ai/11541485/u8E7h9p7HAN46AglFnUX',
-      },
-      {
-        offset: 266,
-        length: 23,
-        type: 'text_link',
-        url: 'https://bingx.com/ru-ru/CopyTrading/1998800000066758',
-      },
-      {
-        offset: 293,
-        length: 19,
-        type: 'bold',
-      },
-      {
-        offset: 349,
-        length: 7,
-        type: 'bold',
-      },
-      {
-        offset: 357,
-        length: 27,
-        type: 'text_link',
-        url: 'https://www.myfxbook.com/members/IceFXMarkets/impulse-x1/10499169/5R1ne5DTZvUKI6mOb46P',
-      },
-      {
-        offset: 385,
-        length: 23,
-        type: 'text_link',
-        url: 'https://bingx.com/ru-ru/CopyTrading/1998800000066757',
-      },
-    ]
+<a href="https://www.myfxbook.com/members/IceFXMarkets/integral-ai/11541485/u8E7h9p7HAN46AglFnUX">Верифицированная статистика</a>
+<a href="https://bingx.com/ru-ru/CopyTrading/1998800000066758">Алгоритм на бирже BingX</a>
 
-    return ctx.answerWithMedia(robotsStatisticsCallbackData, text, { keyboard: robotsStatisticsKeyboard(robotsStatisticsCallbackData), entities })
+💰<b>ATTIC - M (Impulse)</b>
+Доход за 11 месяцев 2025 года: +61.13%
+<a href="https://www.myfxbook.com/members/IceFXMarkets/impulse-x1/10499169/5R1ne5DTZvUKI6mOb46P">Верифицированная статистика</a>
+<a href="https://bingx.com/ru-ru/CopyTrading/1998800000066757">Алгоритм на бирже BingX</a>`
+
+    return ctx.answerWithMedia(robotsStatisticsCallbackData, text, { keyboard: robotsStatisticsKeyboard(robotsStatisticsCallbackData), parseMode: 'HTML' })
   })
 
 feature.callbackQuery([statisticsRDescription, statisticsAIDescription, statisticsMDescription], async (ctx) => {
