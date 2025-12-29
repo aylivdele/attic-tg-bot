@@ -1,10 +1,17 @@
 import type { Context } from '#root/bot/context.js'
-import type { Middleware } from 'grammy'
-import type { InputMediaPhoto, InputMediaVideo } from 'grammy/types'
+import type { InlineKeyboard, Middleware } from 'grammy'
+import type { InputMediaPhoto, InputMediaVideo, LinkPreviewOptions, MessageEntity } from 'grammy/types'
 import { getMediaForMessage } from '#root/database/queries.js'
-import { InlineKeyboard } from 'grammy'
 
-async function answerWithMedia(ctx: Context, messageId: string, text?: string | null, keyboard: InlineKeyboard = InlineKeyboard.from([]), leaveLastMessage?: boolean) {
+interface AnswerOptions {
+  keyboard?: InlineKeyboard
+  leaveLastMessage?: boolean
+  entities?: MessageEntity[]
+  linkPreviewOptions?: LinkPreviewOptions
+}
+
+async function answerWithMedia(ctx: Context, messageId: string, text?: string | null, options?: AnswerOptions) {
+  const { keyboard, leaveLastMessage, entities, linkPreviewOptions = { is_disabled: true } } = options ?? {}
   const media = await getMediaForMessage(messageId, ctx.db)
   text = text || undefined
   if (media && media.length > 0) {
@@ -32,6 +39,7 @@ async function answerWithMedia(ctx: Context, messageId: string, text?: string | 
           }
           if (splicedArrays.length > 0) {
             splicedArrays[splicedArrays.length - 1][0].caption = text
+            splicedArrays[splicedArrays.length - 1][0].caption_entities = entities
             skipText = true
           }
           skipPhotoVideo = true
@@ -54,7 +62,7 @@ async function answerWithMedia(ctx: Context, messageId: string, text?: string | 
       }
     }
 
-    return ctx.reply((!skipText && !!text) ? text : 'Выберите дальнейшее действие', { reply_markup: keyboard })
+    return ctx.reply((!skipText && !!text) ? text : 'Выберите дальнейшее действие', { reply_markup: keyboard, entities, link_preview_options: linkPreviewOptions })
 
     //   if (media.length === 1) {
     //     const m = media[0]
@@ -135,15 +143,15 @@ async function answerWithMedia(ctx: Context, messageId: string, text?: string | 
   // }
   }
   if ((!!ctx.update.message?.text || !!ctx.update.callback_query?.message?.text) && !leaveLastMessage) {
-    return ctx.editMessageText(text || 'Выберите дальнейшее действие', { reply_markup: keyboard })
+    return ctx.editMessageText(text || 'Выберите дальнейшее действие', { reply_markup: keyboard, entities, link_preview_options: linkPreviewOptions })
   }
   await ctx.editMessageReplyMarkup(undefined)
-  return ctx.reply(text || 'Выберите дальнейшее действие', { reply_markup: keyboard })
+  return ctx.reply(text || 'Выберите дальнейшее действие', { reply_markup: keyboard, entities, link_preview_options: linkPreviewOptions })
 }
 
 export function answerWithMediaMiddleware(): Middleware<Context> {
   return async (ctx, next) => {
-    ctx.answerWithMedia = (messageId: string, text?: string | null, keyboard?: InlineKeyboard, leaveLastMessage?: boolean) => answerWithMedia(ctx, messageId, text, keyboard, leaveLastMessage)
+    ctx.answerWithMedia = (messageId: string, text?: string | null, options?: AnswerOptions) => answerWithMedia(ctx, messageId, text, options)
     await next()
   }
 }

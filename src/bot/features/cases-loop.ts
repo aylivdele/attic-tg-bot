@@ -23,6 +23,6 @@ feature.callbackQuery(/^cases\|/, logHandle('cases-loop'), async (ctx) => {
   if (nextCase) {
     ctx.session.lastCasesId = ctx.session.lastCasesId || {}
     ctx.session.lastCasesId[section] = nextCase.id
-    await ctx.answerWithMedia(nextCase.id.toString(), nextCase.caption, createCaseKeyboard(ctx.callbackQuery.data, previousState))
+    await ctx.answerWithMedia(nextCase.id.toString(), nextCase.caption, { keyboard: createCaseKeyboard(ctx.callbackQuery.data, previousState) })
   }
 })

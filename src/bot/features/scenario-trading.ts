@@ -19,7 +19,7 @@ feature
 — как убрать эмоции и торговать по стратегии.  
 После курса человек может реально торговать сам, а не просто повторять чужие сигналы.
 
-Смотри прямо сейчас. Через 24 часа доступ будет закрыт`, mainTradingKeyboard())
+Смотри прямо сейчас. Через 24 часа доступ будет закрыт`, { keyboard: mainTradingKeyboard() })
   })
 
 feature
@@ -41,7 +41,7 @@ feature.callbackQuery(tradingBootcampCallbackData, async (ctx) => {
 1. Зарегистрируйся на сайте ATTIC по моей ссылке:
 https://atticalgo.com?promocode=DlAdyKE0SK
 
-*Регистрация именно по этой ссылке откроет доступ к скидке на курсы и другие продукты компании`, tradingBootcampKeyboard(scenarioTradingCallbackData, bootcamp1))
+*Регистрация именно по этой ссылке откроет доступ к скидке на курсы и другие продукты компании`, { keyboard: tradingBootcampKeyboard(scenarioTradingCallbackData, bootcamp1) })
 })
 
 feature.callbackQuery(bootcamp1, async (ctx) => {
@@ -49,14 +49,14 @@ feature.callbackQuery(bootcamp1, async (ctx) => {
   ctx.updateUserState(bootcamp1)
   return ctx.answerWithMedia(bootcamp1, `2. Войди в личный кабинет и открой раздел “Продукты → COURSES”.
 
-3. Перейди к оплате и активируй курс.`, tradingBootcampKeyboard(tradingBootcampCallbackData, bootcamp2))
+3. Перейди к оплате и активируй курс.`, { keyboard: tradingBootcampKeyboard(tradingBootcampCallbackData, bootcamp2), leaveLastMessage: true })
 })
 
 feature.callbackQuery(bootcamp2, async (ctx) => {
   await ctx.answerCallbackQuery()
   ctx.updateUserState(bootcamp2)
   return ctx.answerWithMedia(bootcamp2, `4. Зарегистрируйся на бирже BingX по специальной ссылке:
-https://bingx.com/partner/attic/`, tradingBootcampKeyboard(bootcamp1, bootcamp3))
+https://bingx.com/partner/attic/`, { keyboard: tradingBootcampKeyboard(bootcamp1, bootcamp3), leaveLastMessage: true })
 })
 
 feature.callbackQuery(bootcamp3, async (ctx) => {
@@ -69,7 +69,7 @@ feature.callbackQuery(bootcamp3, async (ctx) => {
 
 🖥️ После покупки тебе откроются модули и уроки полностью. Обучение проходит прямо в личном кабинете ATTIC, без сторонних платформ.
 
-Если хочешь - напиши мне лично, и я помогу пройти все шаги и быстрее втянуться в нишу.`, tradingBootcampKeyboard(bootcamp2))
+Если хочешь - напиши мне лично, и я помогу пройти все шаги и быстрее втянуться в нишу.`, { keyboard: tradingBootcampKeyboard(bootcamp2), leaveLastMessage: true })
 })
 
 export { composer as scenarioTradingFeature }

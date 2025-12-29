@@ -19,7 +19,7 @@ feature
 — как избежать типичных сливов новичков.  
 Курс делает так, что тема крипты перестаёт быть «страшной» и становится понятной.
 
-Смотри прямо сейчас. Через 24 часа доступ будет закрыт`, mainCryptoKeyboard())
+Смотри прямо сейчас. Через 24 часа доступ будет закрыт`, { keyboard: mainCryptoKeyboard() })
   })
 
 feature
@@ -41,7 +41,7 @@ feature.callbackQuery(cryptoBootcampCallbackData, async (ctx) => {
 1. Зарегистрируйся на сайте ATTIC по моей ссылке:
 https://atticalgo.com?promocode=DlAdyKE0SK
 
-*Регистрация именно по этой ссылке откроет доступ к скидке на курсы и другие продукты компании`, cryptoBootcampKeyboard(scenarioCryptoCallbackData, bootcamp1))
+*Регистрация именно по этой ссылке откроет доступ к скидке на курсы и другие продукты компании`, { keyboard: cryptoBootcampKeyboard(scenarioCryptoCallbackData, bootcamp1) })
 })
 
 feature.callbackQuery(bootcamp1, async (ctx) => {
@@ -49,14 +49,14 @@ feature.callbackQuery(bootcamp1, async (ctx) => {
   ctx.updateUserState(bootcamp1)
   return ctx.answerWithMedia(bootcamp1, `2. Войди в личный кабинет и открой раздел “Продукты → COURSES”.
 
-3. Перейди к оплате и активируй курс.`, cryptoBootcampKeyboard(cryptoBootcampCallbackData, bootcamp2), true)
+3. Перейди к оплате и активируй курс.`, { keyboard: cryptoBootcampKeyboard(cryptoBootcampCallbackData, bootcamp2), leaveLastMessage: true })
 })
 
 feature.callbackQuery(bootcamp2, async (ctx) => {
   await ctx.answerCallbackQuery()
   ctx.updateUserState(bootcamp2)
   return ctx.answerWithMedia(bootcamp2, `4. Зарегистрируйся на бирже BingX по специальной ссылке:
-https://bingx.com/partner/attic/`, cryptoBootcampKeyboard(bootcamp1, bootcamp3), true)
+https://bingx.com/partner/attic/`, { keyboard: cryptoBootcampKeyboard(bootcamp1, bootcamp3), leaveLastMessage: true })
 })
 
 feature.callbackQuery(bootcamp3, async (ctx) => {
@@ -69,7 +69,7 @@ feature.callbackQuery(bootcamp3, async (ctx) => {
 
 🖥️ После покупки тебе откроются модули и уроки полностью. Обучение проходит прямо в личном кабинете ATTIC, без сторонних платформ.
 
-Если хочешь - напиши мне лично, и я помогу пройти все шаги и быстрее втянуться в нишу.`, cryptoBootcampKeyboard(bootcamp2), true)
+Если хочешь - напиши мне лично, и я помогу пройти все шаги и быстрее втянуться в нишу.`, { keyboard: cryptoBootcampKeyboard(bootcamp2), leaveLastMessage: true })
 })
 
 export { composer as scenarioCryptoFeature }

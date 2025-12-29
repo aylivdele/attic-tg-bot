@@ -13,7 +13,7 @@ feature
 
     await ctx.answerCallbackQuery()
     ctx.updateUserState(scenarioPartnershipCallbackData)
-    return ctx.answerWithMedia(scenarioPartnershipCallbackData, `Видео о том как я в 21 год купила ролекс улетела жить в мексику и купила маме квартиру.`, mainpartnershipKeyboard())
+    return ctx.answerWithMedia(scenarioPartnershipCallbackData, `Видео о том как я в 21 год купила ролекс улетела жить в мексику и купила маме квартиру.`, { keyboard: mainpartnershipKeyboard() })
   })
 
 const bootcamp1 = `${partnershipBootcampCallbackData}1`
@@ -28,7 +28,7 @@ feature.callbackQuery(partnershipBootcampCallbackData, async (ctx) => {
   return ctx.answerWithMedia(partnershipBootcampCallbackData, `Чтобы получить доступ к партнерской сети и нашей команде, выполни несколько простых шагов 👇
 
 1️. Зарегистрируйся на бирже BingX по специальной ссылке:
-https://bingx.com/partner/attic/`, partnershipBootcampKeyboard(scenarioPartnershipCallbackData, bootcamp1))
+https://bingx.com/partner/attic/`, { keyboard: partnershipBootcampKeyboard(scenarioPartnershipCallbackData, bootcamp1) })
 })
 
 feature.callbackQuery(bootcamp1, async (ctx) => {
@@ -37,14 +37,14 @@ feature.callbackQuery(bootcamp1, async (ctx) => {
   return ctx.answerWithMedia(bootcamp1, `2. Зарегистрируйся на сайте ATTIC по моей ссылке:
 https://atticalgo.com?promocode=DlAdyKE0SK
 
-*Регистрация именно по этой ссылке откроет доступ к скидке на тарифы и другие продукты компании`, partnershipBootcampKeyboard(partnershipBootcampCallbackData, bootcamp2))
+*Регистрация именно по этой ссылке откроет доступ к скидке на тарифы и другие продукты компании`, { keyboard: partnershipBootcampKeyboard(partnershipBootcampCallbackData, bootcamp2), leaveLastMessage: true })
 })
 
 feature.callbackQuery(bootcamp2, async (ctx) => {
   await ctx.answerCallbackQuery()
   ctx.updateUserState(bootcamp2)
   return ctx.answerWithMedia(bootcamp2, `3️. Перейди в меню “Тарифы” и выбери желаемый партнерский тариф
-(В видео выше я показываю как это сделать)`, partnershipBootcampKeyboard(bootcamp1, bootcamp3))
+(В видео выше я показываю как это сделать)`, { keyboard: partnershipBootcampKeyboard(bootcamp1, bootcamp3), leaveLastMessage: true })
 })
 
 feature.callbackQuery(bootcamp3, async (ctx) => {
@@ -58,7 +58,7 @@ feature.callbackQuery(bootcamp3, async (ctx) => {
 
 Готово! ✅
 
-Если хочешь - напиши мне лично, и я помогу пройти все шаги и быстрее втянуться в нишу.`, partnershipBootcampKeyboard(bootcamp2))
+Если хочешь - напиши мне лично, и я помогу пройти все шаги и быстрее втянуться в нишу.`, { keyboard: partnershipBootcampKeyboard(bootcamp2), leaveLastMessage: true })
 })
 
 export { composer as scenarioPartnershipFeature }

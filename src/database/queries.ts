@@ -43,7 +43,7 @@ export interface UserRecord {
 
 export function getUserById(userId: number, db: Database): Promise<UserRecord | undefined> {
   return db.query('select * from users u where u.id = $1 and u.bot_id = $2', [userId, getBotId()]).then((res) => {
-    if (res.rows.length === 0) {
+    if (!res?.rows) {
       return undefined
     }
     return res.rows[0]

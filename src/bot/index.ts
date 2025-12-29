@@ -19,6 +19,7 @@ import { dbMiddleware } from '#root/bot/middlewares/db.js'
 import { notificationsMiddleware } from '#root/bot/middlewares/notifications.js'
 import { session } from '#root/bot/middlewares/session.js'
 import { updateLogger } from '#root/bot/middlewares/update-logger.js'
+import { query } from '#root/database/index.js'
 import { autoChatAction } from '@grammyjs/auto-chat-action'
 import { hydrate } from '@grammyjs/hydrate'
 import { hydrateReply, parseMode } from '@grammyjs/parse-mode'
@@ -87,6 +88,21 @@ export function createBot(token: string, dependencies: Dependencies, botConfig?:
 
   // must be the last handler
   protectedBot.use(unhandledFeature)
+
+  const _interval = setInterval(() => {
+    const chatId = config.notificationChat
+    if (chatId) {
+      query('UPDATE users SET last_update = 0 WHERE last_update <> 0 and last_update < $1 RETURNING username', [Date.now() - (1000 * 60 * 60 * 24)])
+        .then((res) => {
+          if (!res?.rows) {
+            return
+          }
+          for (const username of res.rows) {
+            bot.api.sendMessage(chatId, `Пользователь сутки не взаимодействовал в боте: @${username}`)
+          }
+        })
+    }
+  })
 
   return bot
 }

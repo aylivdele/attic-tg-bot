@@ -40,10 +40,11 @@ feature.callbackQuery([editRobotsCallbackData, editSignalsCallbackData, editCryp
 — Отправляйте в бота необходимую информацию по кейсу, далее нажимайте “Сохранить кейс”, после чего добавляйте информацию по следующему кейсу из выбранного раздела или выберите другой раздел
 
 — Если хотите сменить раздел добавления кейса, нажмите “Сменить раздел”`
-  const entities: MessageEntity[] = [{ type: 'italic', offset: text.indexOf(sectionName), length: sectionName.length }]
-  const index = text.indexOf('❗') + 1
-  const length = 'Отправляйте в порядке очереди, в которой они буду использованы ботом для отправки пользователю'.length
-  entities.push({ type: 'bold', offset: index, length })
+  const entities: MessageEntity[] = [{ type: 'bold', offset: 0, length: 17 }]
+  const substr = 'Отправляйте в порядке очереди, в которой они буду использованы ботом для отправки пользователю'
+  const index = text.indexOf(substr)
+  entities.push({ type: 'bold', offset: index, length: substr.length })
+  entities.push({ type: 'italic', offset: text.indexOf(sectionName), length: sectionName.length })
 
   return ctx.editMessageText(text, { reply_markup: await createMainCasesKeyboard(newCase), entities })
 })
@@ -120,7 +121,7 @@ feature.callbackQuery(viewCaseContentCallbackData, async (ctx) => {
     return ctx.answerCallbackQuery({ show_alert: true, text: 'Нет несохранённого кейса' })
   }
   await ctx.answerCallbackQuery()
-  await ctx.answerWithMedia(newCase.id.toString(), newCase.caption, await createMainCasesKeyboard(newCase))
+  await ctx.answerWithMedia(newCase.id.toString(), newCase.caption, { keyboard: await createMainCasesKeyboard(newCase) })
 })
 
 export { composer as casesFeature }

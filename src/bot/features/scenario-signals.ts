@@ -17,7 +17,7 @@ feature
 — готовая инструкция как открывать сделки
 — подойдет ли это новичку
 — с какой суммы можно начать
-Смотри прямо сейчас. Через 24 часа доступ будет закрыт`, mainSignalsKeyboard())
+Смотри прямо сейчас. Через 24 часа доступ будет закрыт`, { keyboard: mainSignalsKeyboard() })
   })
 
 feature
@@ -59,7 +59,7 @@ NUKE
 ANUBIS
 Винрейт: ~68.40%
 Сигналов в месяц: ≈115
-Цена: 11 $/мес`, signalsStatisticsKeyboard(signalsStatisticsCallbackData))
+Цена: 11 $/мес`, { keyboard: signalsStatisticsKeyboard(signalsStatisticsCallbackData) })
   })
 
 const bootcamp1 = `${signalsBootcampCallbackData}1`
@@ -74,7 +74,7 @@ feature.callbackQuery(signalsBootcampCallbackData, async (ctx) => {
   return ctx.answerWithMedia(signalsBootcampCallbackData, `Чтобы получить доступ к сигналам и обучению по работе с ними, выполни несколько шагов 👇
 
 1️. Зарегистрируйся на бирже BingX по специальной ссылке:
-https://bingx.com/partner/attic/`, signalsBootcampKeyboard(scenarioSignalsCallbackData, bootcamp1))
+https://bingx.com/partner/attic/`, { keyboard: signalsBootcampKeyboard(scenarioSignalsCallbackData, bootcamp1) })
 })
 
 feature.callbackQuery(bootcamp1, async (ctx) => {
@@ -83,14 +83,14 @@ feature.callbackQuery(bootcamp1, async (ctx) => {
   return ctx.answerWithMedia(bootcamp1, `2. Зарегистрируйся на сайте ATTIC по моей ссылке:
 https://atticalgo.com?promocode=DlAdyKE0SK
 
-*Регистрация именно по этой ссылке откроет доступ к скидке на сигналы и другие продукты компании`, signalsBootcampKeyboard(signalsBootcampCallbackData, bootcamp2))
+*Регистрация именно по этой ссылке откроет доступ к скидке на сигналы и другие продукты компании`, { keyboard: signalsBootcampKeyboard(signalsBootcampCallbackData, bootcamp2), leaveLastMessage: true })
 })
 
 feature.callbackQuery(bootcamp2, async (ctx) => {
   await ctx.answerCallbackQuery()
   ctx.updateUserState(bootcamp2)
   return ctx.answerWithMedia(bootcamp2, `3️. В личном кабинете ATTIC зайди в “Настройки → Биржи” и добавь свой UID
-(его можно найти в профиле BingX)`, signalsBootcampKeyboard(bootcamp1, bootcamp3))
+(его можно найти в профиле BingX)`, { keyboard: signalsBootcampKeyboard(bootcamp1, bootcamp3), leaveLastMessage: true })
 })
 
 feature.callbackQuery(bootcamp3, async (ctx) => {
@@ -105,7 +105,7 @@ feature.callbackQuery(bootcamp3, async (ctx) => {
 
 💡 После выполнения шага 3 (при условии регистрации по моей ссылке) у тебя также откроются 3 урока в нашей CRYPTO SCHOOL, где ты разберёшься, как правильно открывать сделки по сигналам.
 
-Если хочешь - напиши мне лично, и я помогу пройти все шаги и быстрее втянуться в нишу.`, signalsBootcampKeyboard(bootcamp2))
+Если хочешь - напиши мне лично, и я помогу пройти все шаги и быстрее втянуться в нишу.`, { keyboard: signalsBootcampKeyboard(bootcamp2), leaveLastMessage: true })
 })
 
 export { composer as scenarioSignalsFeature }
