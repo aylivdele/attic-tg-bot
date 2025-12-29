@@ -28,11 +28,11 @@ feature.callbackQuery([editRobotsCallbackData, editSignalsCallbackData, editCryp
   ctx.updateUserState(editCasesCallbackData)
   const newCase = await getUnsavedCaseByUser(ctx.from.id, ctx.db)
   const sectionName = getSectionName(ctx.callbackQuery.data)
-  const text = `*Выбранный раздел*: _${sectionName}_
+  const text = `<b>Выбранный раздел:</b> <i>${sectionName}</i>
 → Добавление нового кейса ←
 
 — Отправьте медиафайлы/голосовые/кругляшки или сообщения, которые будут добавлены в кейс
-❗*Отправляйте в порядке очереди, в которой они буду использованы ботом для отправки пользователю*
+❗<b>Отправляйте в порядке очереди, в которой они буду использованы ботом для отправки пользователю</b>
 
 Все, что вы отправите в бота до того, пока не нажмете кнопку “Сохранить кейс” будет сохранено как один кейс.
 
@@ -40,7 +40,7 @@ feature.callbackQuery([editRobotsCallbackData, editSignalsCallbackData, editCryp
 
 — Если хотите сменить раздел добавления кейса, нажмите “Сменить раздел”`
 
-  return ctx.editMessageText(text, { reply_markup: await createMainCasesKeyboard(newCase), parse_mode: 'MarkdownV2' })
+  return ctx.editMessageText(text, { reply_markup: await createMainCasesKeyboard(newCase), parse_mode: 'HTML' })
 })
 
 feature.on(['message:text', 'message:video_note', 'message:voice', 'message:video', 'message:photo', 'message:audio'], async (ctx, next) => {
