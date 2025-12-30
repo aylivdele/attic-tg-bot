@@ -16,7 +16,7 @@ export function mainTradingKeyboard() {
 export function tradingBootcampKeyboard(previousState: string, nextState?: string) {
   return InlineKeyboard.from([
     [{ text: nextState ? 'Далее' : '🚀 В меню', callback_data: nextState ?? startMenuCallbackData }],
-    [{ text: '↩ Назад', callback_data: previousState }],
+    // [{ text: '↩ Назад', callback_data: previousState }],
     [{ text: '💬 Написать мне', callback_data: shortDirectMessageCallbackData }],
   ])
 }

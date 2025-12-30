@@ -22,7 +22,7 @@ export function cryptoStatisticsKeyboard(_currentState: string) {
 export function cryptoBootcampKeyboard(previousState: string, nextState?: string) {
   return InlineKeyboard.from([
     [{ text: nextState ? 'Далее' : '🚀 В меню', callback_data: nextState ?? startMenuCallbackData }],
-    [{ text: '↩ Назад', callback_data: scenarioCryptoCallbackData }],
+    // [{ text: '↩ Назад', callback_data: scenarioCryptoCallbackData }],
     [{ text: '💬 Написать мне', callback_data: shortDirectMessageCallbackData }],
   ])
 }

@@ -158,6 +158,9 @@ async function answerWithMedia(ctx: Context, messageId: string, text?: string | 
   else if (ctx.update.callback_query?.message?.text === chooseNextStepMessage) {
     leaveLastMessage = false
   }
+  else if (ctx.session.userInfo?.previous_state?.includes('bootcamp')) {
+    leaveLastMessage = true
+  }
   if ((!!ctx.update.message?.text || !!ctx.update.callback_query?.message?.text) && !leaveLastMessage) {
     return ctx.editMessageText(text || chooseNextStepMessage, { reply_markup: keyboard, entities, link_preview_options: linkPreviewOptions, parse_mode: parseMode })
   }
