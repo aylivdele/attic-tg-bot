@@ -32,7 +32,7 @@ const bootcamp2 = `${cryptoBootcampCallbackData}2`
 const bootcamp3 = `${cryptoBootcampCallbackData}3`
 
 feature.callbackQuery(cryptoBootcampCallbackData, async (ctx) => {
-  ctx.notifyAdmin(`Пользователь заинтересовался покупкой курса: @${ctx.from.username}`)
+  ctx.notifyAdmin(`Пользователь заинтересовался покупкой Crypto Course: @${ctx.from.username}`)
 
   await ctx.answerCallbackQuery()
   ctx.updateUserState(cryptoBootcampCallbackData)
@@ -41,7 +41,7 @@ feature.callbackQuery(cryptoBootcampCallbackData, async (ctx) => {
 1. Зарегистрируйся на сайте ATTIC по моей ссылке:
 https://atticalgo.com?promocode=DlAdyKE0SK
 
-*Регистрация именно по этой ссылке откроет доступ к скидке на курсы и другие продукты компании`, { keyboard: cryptoBootcampKeyboard(scenarioCryptoCallbackData, bootcamp1) })
+*Регистрация именно по этой ссылке откроет доступ к скидке на курсы и другие продукты компании`, { keyboard: cryptoBootcampKeyboard(scenarioCryptoCallbackData, bootcamp1), leaveLastMessage: ctx.session.userInfo?.previous_state === scenarioCryptoCallbackData })
 })
 
 feature.callbackQuery(bootcamp1, async (ctx) => {
@@ -49,14 +49,14 @@ feature.callbackQuery(bootcamp1, async (ctx) => {
   ctx.updateUserState(bootcamp1)
   return ctx.answerWithMedia(bootcamp1, `2. Войди в личный кабинет и открой раздел “Продукты → COURSES”.
 
-3. Перейди к оплате и активируй курс.`, { keyboard: cryptoBootcampKeyboard(cryptoBootcampCallbackData, bootcamp2), leaveLastMessage: true })
+3. Перейди к оплате и активируй курс.`, { keyboard: cryptoBootcampKeyboard(scenarioCryptoCallbackData, bootcamp2), leaveLastMessage: true })
 })
 
 feature.callbackQuery(bootcamp2, async (ctx) => {
   await ctx.answerCallbackQuery()
   ctx.updateUserState(bootcamp2)
   return ctx.answerWithMedia(bootcamp2, `4. Зарегистрируйся на бирже BingX по специальной ссылке:
-https://bingx.com/partner/attic/`, { keyboard: cryptoBootcampKeyboard(bootcamp1, bootcamp3), leaveLastMessage: true })
+https://bingx.com/partner/attic/`, { keyboard: cryptoBootcampKeyboard(scenarioCryptoCallbackData, bootcamp3), leaveLastMessage: true })
 })
 
 feature.callbackQuery(bootcamp3, async (ctx) => {
@@ -69,7 +69,7 @@ feature.callbackQuery(bootcamp3, async (ctx) => {
 
 🖥️ После покупки тебе откроются модули и уроки полностью. Обучение проходит прямо в личном кабинете ATTIC, без сторонних платформ.
 
-Если хочешь - напиши мне лично, и я помогу пройти все шаги и быстрее втянуться в нишу.`, { keyboard: cryptoBootcampKeyboard(bootcamp2), leaveLastMessage: true })
+Если хочешь - <b>напиши мне лично, и я помогу пройти все шаги и быстрее втянуться в нишу.</b>`, { keyboard: cryptoBootcampKeyboard(scenarioCryptoCallbackData), leaveLastMessage: true, parseMode: 'HTML' })
 })
 
 export { composer as scenarioCryptoFeature }

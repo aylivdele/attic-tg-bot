@@ -12,6 +12,7 @@ const feature = composer.chatType('private')
 
 feature.callbackQuery(directMessageCallbackData, async (ctx) => {
   ctx.notifyAdmin(`Пользователь хочет связаться лично для разбора всех нюансов: @${ctx.from.username}`)
+  ctx.updateUserState(directMessageCallbackData)
   await ctx.answerCallbackQuery()
   return ctx.editMessageText(`📞 Мой телеграмм: @${ctx.config.botAdminUsername}\n\nЛичный диалог - лучший формат, чтобы быстро и продуктивно во всём разобраться и найти для себя лучшую стратегию для старта`, { reply_markup: directMessageKeyboard(ctx.config.botAdminUsername) })
 })
@@ -19,5 +20,6 @@ feature.callbackQuery(directMessageCallbackData, async (ctx) => {
 feature.callbackQuery(shortDirectMessageCallbackData, async (ctx) => {
   ctx.notifyAdmin(`Пользователь хочет связаться лично для разбора всех нюансов: @${ctx.from.username}`)
   await ctx.answerCallbackQuery()
-  return ctx.editMessageText(`📞 Мой телеграмм: @${ctx.config.botAdminUsername}`, { reply_markup: shortDirectMessageKeyboard(ctx.session.userInfo?.current_state ?? startMenuCallbackData, ctx.config.botAdminUsername) })
+  ctx.updateUserState(shortDirectMessageCallbackData)
+  return ctx.editMessageText(`📞 Мой телеграмм: @${ctx.config.botAdminUsername}`, { reply_markup: shortDirectMessageKeyboard(ctx.session.userInfo?.previous_state ?? startMenuCallbackData, ctx.config.botAdminUsername) })
 })

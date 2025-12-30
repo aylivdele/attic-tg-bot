@@ -27,8 +27,8 @@ feature.callbackQuery(partnershipBootcampCallbackData, async (ctx) => {
   ctx.updateUserState(partnershipBootcampCallbackData)
   return ctx.answerWithMedia(partnershipBootcampCallbackData, `Чтобы получить доступ к партнерской сети и нашей команде, выполни несколько простых шагов 👇
 
-1️. Зарегистрируйся на бирже BingX по специальной ссылке:
-https://bingx.com/partner/attic/`, { keyboard: partnershipBootcampKeyboard(scenarioPartnershipCallbackData, bootcamp1) })
+1. Зарегистрируйся на бирже BingX по специальной ссылке:
+https://bingx.com/partner/attic/`, { keyboard: partnershipBootcampKeyboard(scenarioPartnershipCallbackData, bootcamp1), leaveLastMessage: ctx.session.userInfo?.previous_state === scenarioPartnershipCallbackData })
 })
 
 feature.callbackQuery(bootcamp1, async (ctx) => {
@@ -37,14 +37,14 @@ feature.callbackQuery(bootcamp1, async (ctx) => {
   return ctx.answerWithMedia(bootcamp1, `2. Зарегистрируйся на сайте ATTIC по моей ссылке:
 https://atticalgo.com?promocode=DlAdyKE0SK
 
-*Регистрация именно по этой ссылке откроет доступ к скидке на тарифы и другие продукты компании`, { keyboard: partnershipBootcampKeyboard(partnershipBootcampCallbackData, bootcamp2), leaveLastMessage: true })
+*Регистрация именно по этой ссылке откроет доступ к скидке на тарифы и другие продукты компании`, { keyboard: partnershipBootcampKeyboard(scenarioPartnershipCallbackData, bootcamp2), leaveLastMessage: true })
 })
 
 feature.callbackQuery(bootcamp2, async (ctx) => {
   await ctx.answerCallbackQuery()
   ctx.updateUserState(bootcamp2)
-  return ctx.answerWithMedia(bootcamp2, `3️. Перейди в меню “Тарифы” и выбери желаемый партнерский тариф
-(В видео выше я показываю как это сделать)`, { keyboard: partnershipBootcampKeyboard(bootcamp1, bootcamp3), leaveLastMessage: true })
+  return ctx.answerWithMedia(bootcamp2, `3. Перейди в меню “Тарифы” и выбери желаемый партнерский тариф
+(В видео выше я показываю как это сделать)`, { keyboard: partnershipBootcampKeyboard(scenarioPartnershipCallbackData, bootcamp3), leaveLastMessage: true })
 })
 
 feature.callbackQuery(bootcamp3, async (ctx) => {
@@ -53,12 +53,12 @@ feature.callbackQuery(bootcamp3, async (ctx) => {
   return ctx.answerWithMedia(bootcamp3, `4. В личном кабинете ATTIC зайди в “Настройки → Биржи” и добавь свой UID
 (его можно найти в профиле BingX)
 
-5️. После оплаты тарифа тебе откроется доступ к нашим командным чатам и моему сопровождению
+5. После оплаты тарифа тебе откроется доступ к нашим командным чатам и моему сопровождению
 Также, после оплаты напиши мне “Я в игре” и я отправлю тебе гайд с помощью которого уже десятки человек заработали больше миллиона рублей с партнерской программы
 
 Готово! ✅
 
-Если хочешь - напиши мне лично, и я помогу пройти все шаги и быстрее втянуться в нишу.`, { keyboard: partnershipBootcampKeyboard(bootcamp2), leaveLastMessage: true })
+Если хочешь - <b>напиши мне лично, и я помогу пройти все шаги и быстрее втянуться в нишу.</b>`, { keyboard: partnershipBootcampKeyboard(scenarioPartnershipCallbackData), leaveLastMessage: true, parseMode: 'HTML' })
 })
 
 export { composer as scenarioPartnershipFeature }

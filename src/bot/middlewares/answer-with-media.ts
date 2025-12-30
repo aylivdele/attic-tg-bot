@@ -1,6 +1,7 @@
 import type { Context } from '#root/bot/context.js'
 import type { InlineKeyboard, Middleware } from 'grammy'
 import type { InputMediaPhoto, InputMediaVideo, LinkPreviewOptions, MessageEntity, ParseMode } from 'grammy/types'
+import { shortDirectMessageCallbackData } from '#root/bot/callback-data/direct-message.js'
 import { getMediaForMessage } from '#root/database/queries.js'
 
 export interface AnswerOptions {
@@ -11,8 +12,13 @@ export interface AnswerOptions {
   parseMode?: ParseMode
 }
 
+const chooseNextStepMessage = 'Выберите дальнейшее действие'
+
 async function answerWithMedia(ctx: Context, messageId: string, text?: string | null, options?: AnswerOptions) {
-  const { keyboard, leaveLastMessage, entities, parseMode, linkPreviewOptions = { is_disabled: true } } = options ?? {}
+  const { keyboard, entities, parseMode, linkPreviewOptions = { is_disabled: true } } = options ?? {}
+  if (ctx.session.userInfo?.previous_state === shortDirectMessageCallbackData && ctx.session.userInfo.current_state?.includes('bootcamp')) {
+    return ctx.editMessageText(chooseNextStepMessage, { reply_markup: keyboard })
+  }
   const media = await getMediaForMessage(messageId, ctx.db)
   text = text || undefined
   if (media && media.length > 0) {
@@ -64,7 +70,7 @@ async function answerWithMedia(ctx: Context, messageId: string, text?: string | 
       }
     }
 
-    return ctx.reply((!skipText && !!text) ? text : 'Выберите дальнейшее действие', { reply_markup: keyboard, entities, link_preview_options: linkPreviewOptions, parse_mode: parseMode })
+    return ctx.reply((!skipText && !!text) ? text : chooseNextStepMessage, { reply_markup: keyboard, entities, link_preview_options: linkPreviewOptions, parse_mode: parseMode })
 
     //   if (media.length === 1) {
     //     const m = media[0]
@@ -121,7 +127,7 @@ async function answerWithMedia(ctx: Context, messageId: string, text?: string | 
   //     for (const m of splicedPreparedMedia) {
   //       await ctx.replyWithMediaGroup(m)
   //     }
-  //     return ctx.reply('Выберите дальнейшее действие', { reply_markup: keyboard })
+  //     return ctx.reply(chooseNextStepMessage, { reply_markup: keyboard })
   //   }
   //   else if (groupableMedia.length === 1) {
   //     const m = groupableMedia[0]
@@ -144,11 +150,19 @@ async function answerWithMedia(ctx: Context, messageId: string, text?: string | 
   //   ctx.logger.error('Failed to remove media from message:', e)
   // }
   }
+
+  let leaveLastMessage = options?.leaveLastMessage
+  if (ctx.update.callback_query?.message?.video) {
+    leaveLastMessage = true
+  }
+  else if (ctx.update.callback_query?.message?.text === chooseNextStepMessage) {
+    leaveLastMessage = false
+  }
   if ((!!ctx.update.message?.text || !!ctx.update.callback_query?.message?.text) && !leaveLastMessage) {
-    return ctx.editMessageText(text || 'Выберите дальнейшее действие', { reply_markup: keyboard, entities, link_preview_options: linkPreviewOptions, parse_mode: parseMode })
+    return ctx.editMessageText(text || chooseNextStepMessage, { reply_markup: keyboard, entities, link_preview_options: linkPreviewOptions, parse_mode: parseMode })
   }
   await ctx.editMessageReplyMarkup(undefined)
-  return ctx.reply(text || 'Выберите дальнейшее действие', { reply_markup: keyboard, entities, link_preview_options: linkPreviewOptions, parse_mode: parseMode })
+  return ctx.reply(text || chooseNextStepMessage, { reply_markup: keyboard, entities, link_preview_options: linkPreviewOptions, parse_mode: parseMode })
 }
 
 export function answerWithMediaMiddleware(): Middleware<Context> {
