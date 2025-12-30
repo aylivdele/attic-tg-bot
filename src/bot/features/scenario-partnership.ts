@@ -13,7 +13,7 @@ feature
 
     await ctx.answerCallbackQuery()
     ctx.updateUserState(scenarioPartnershipCallbackData)
-    return ctx.answerWithMedia(scenarioPartnershipCallbackData, `Видео о том как я в 21 год купила ролекс улетела жить в мексику и купила маме квартиру.`, { keyboard: mainpartnershipKeyboard() })
+    return ctx.answerWithMedia(scenarioPartnershipCallbackData, `Видео о том как я в 21 год купила ролекс, улетела жить в мексику и купила маме квартиру.`, { keyboard: mainpartnershipKeyboard() })
   })
 
 const bootcamp1 = `${partnershipBootcampCallbackData}1`

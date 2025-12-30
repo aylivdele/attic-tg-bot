@@ -16,7 +16,7 @@ feature
       return ctx.editMessageReplyMarkup({ reply_markup: mainRobotsKeyboard() })
     }
     // ctx.callbackQuery.message?.video
-    return ctx.answerWithMedia(scenarioRobotsCallbackData, `Посмотри видео и узнай:\n\n— Как выстроить пассивный доход в крипте\n— Что такое торговые роботы простыми словами\n— Как вникнуть в топовое направление алготрейдинга\n— Подойдёт ли это новичку?\n\n❗<b>Смотри прямо сейчас. Через 24 часа доступ будет закрыт</b>`, { keyboard: mainRobotsKeyboard(), parseMode: 'HTML' })
+    return ctx.answerWithMedia(scenarioRobotsCallbackData, `Посмотри видео и узнай:\n\n— Как выстроить пассивный доход в крипте\n— Что такое торговые роботы простыми словами\n— Как вникнуть в топовое направление алготрейдинга\n— Подойдёт ли это новичку?\n\n❗Смотри прямо сейчас. <b>Через 24 часа доступ будет закрыт</b>`, { keyboard: mainRobotsKeyboard(), parseMode: 'HTML' })
   })
 
 // <a href="https://bingx.com/ru-ru/CopyTrading/1998800000066710?accountEnum=BINGX_SWAP_FUTURES&apiIdentity=1468422161599803396">Алгоритм на бирже BingX</a>

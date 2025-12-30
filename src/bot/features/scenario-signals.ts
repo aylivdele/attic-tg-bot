@@ -19,7 +19,7 @@ feature
 — подойдет ли это новичку
 — с какой суммы можно начать
 
-<b>Смотри прямо сейчас. Через 24 часа доступ будет закрыт</b>`, { keyboard: mainSignalsKeyboard(), parseMode: 'HTML' })
+Смотри прямо сейчас. <b>Через 24 часа доступ будет закрыт</b>`, { keyboard: mainSignalsKeyboard(), parseMode: 'HTML' })
   })
 
 feature
