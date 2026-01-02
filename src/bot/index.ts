@@ -102,7 +102,7 @@ export function createBot(token: string, dependencies: Dependencies, botConfig?:
           }
         })
     }
-  })
+  }, 1000 * 60 * 60)
 
   return bot
 }
