@@ -10,3 +10,5 @@ feature.use((ctx) => {
     ctx.notifyAdmin(`Пользователь восстановил активность в боте: @${ctx.session.userInfo.username}`)
   }
 })
+
+export { composer as cameBackFeature }

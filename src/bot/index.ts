@@ -12,6 +12,7 @@ import { scenarioRobotsFeature } from '#root/bot/features/scenario-robots.js'
 import { scenarioSignalsFeature } from '#root/bot/features/scenario-signals.js'
 import { scenarioTradingFeature } from '#root/bot/features/scenario-trading.js'
 import { unhandledFeature } from '#root/bot/features/unhandled.js'
+import { cameBackFeature } from '#root/bot/features/update-notification.js'
 import { welcomeFeature } from '#root/bot/features/welcome.js'
 import { errorHandler } from '#root/bot/handlers/error.js'
 import { answerWithMediaMiddleware } from '#root/bot/middlewares/answer-with-media.js'
@@ -76,6 +77,7 @@ export function createBot(token: string, dependencies: Dependencies, botConfig?:
   protectedBot.use(notificationsMiddleware())
 
   // Handlers
+  protectedBot.use(cameBackFeature)
   protectedBot.use(welcomeFeature)
   protectedBot.use(casesFeature)
   protectedBot.use(casesLoopFeature)
