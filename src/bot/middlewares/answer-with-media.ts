@@ -23,7 +23,9 @@ async function answerWithMedia(ctx: Context, messageId: string, text?: string | 
   text = text || undefined
   if (media && media.length > 0) {
     try {
-      await ctx.editMessageReplyMarkup(undefined)
+      if (ctx.update.callback_query) {
+        await ctx.editMessageReplyMarkup(undefined)
+      }
     }
     catch (e) {
       ctx.logger.error('Failed to remove inline keyboard:', e)
@@ -161,10 +163,12 @@ async function answerWithMedia(ctx: Context, messageId: string, text?: string | 
   else if (ctx.session.userInfo?.previous_state?.includes('bootcamp')) {
     leaveLastMessage = true
   }
-  if ((!!ctx.update.message?.text || !!ctx.update.callback_query?.message?.text) && !leaveLastMessage) {
+  if (!!ctx.update.callback_query?.message?.text && !leaveLastMessage) {
     return ctx.editMessageText(text || chooseNextStepMessage, { reply_markup: keyboard, entities, link_preview_options: linkPreviewOptions, parse_mode: parseMode })
   }
-  await ctx.editMessageReplyMarkup(undefined)
+  if (ctx.update.callback_query) {
+    await ctx.editMessageReplyMarkup(undefined)
+  }
   return ctx.reply(text || chooseNextStepMessage, { reply_markup: keyboard, entities, link_preview_options: linkPreviewOptions, parse_mode: parseMode })
 }
 
