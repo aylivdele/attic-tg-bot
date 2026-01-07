@@ -34,20 +34,6 @@ async function answerWithMedia(ctx: Context, messageId: string, text?: string | 
   }
 
   if (media && media.length > 0) {
-    try {
-      if (ctx.update.callback_query) {
-        if (!leaveLastMessage && ctx.update.callback_query.message?.text === chooseNextStepMessage) {
-          await ctx.deleteMessage()
-        }
-        else {
-          await ctx.editMessageReplyMarkup(undefined)
-        }
-      }
-    }
-    catch (e) {
-      ctx.logger.error('Failed to remove inline keyboard:', e)
-    }
-
     let skipPhotoVideo = false
     let skipText = false
     const skipKeyboard = false
@@ -62,12 +48,15 @@ async function answerWithMedia(ctx: Context, messageId: string, text?: string | 
             m.caption = text
             m.parse_mode = parseMode
             m.caption_entities = entities
-            if (ctx.update.callback_query) {
+            if (!leaveLastMessage && ctx.update.callback_query) {
               return await ctx.editMessageMedia(m, { reply_markup: keyboard })
             }
             else {
               if (m.type === 'photo') {
                 return await ctx.replyWithPhoto(m.media, { reply_markup: keyboard, caption: text, caption_entities: entities, parse_mode: parseMode })
+              }
+              else {
+                return await ctx.replyWithVideo(m.media, { reply_markup: keyboard, caption: text, caption_entities: entities, parse_mode: parseMode })
               }
             }
           }
@@ -104,6 +93,20 @@ async function answerWithMedia(ctx: Context, messageId: string, text?: string | 
           await ctx.replyWithVoice(cur.file_id)
           break
       }
+    }
+
+    try {
+      if (ctx.update.callback_query) {
+        if (!leaveLastMessage && ctx.update.callback_query.message?.text === chooseNextStepMessage) {
+          await ctx.deleteMessage()
+        }
+        else {
+          await ctx.editMessageReplyMarkup(undefined)
+        }
+      }
+    }
+    catch (e) {
+      ctx.logger.error('Failed to remove inline keyboard:', e)
     }
 
     if (skipKeyboard) {
