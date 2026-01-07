@@ -10,6 +10,8 @@ const baseConfigSchema = v.object({
   botAdmins: v.optional(v.pipe(v.string(), v.transform(JSON.parse), v.array(v.number())), '[]'),
   notificationChat: v.optional(v.pipe(v.string(), v.transform(Number), v.number())),
   botAdminUsername: v.optional(v.string()),
+  botAdminRefUrl: v.optional(v.pipe(v.string(), v.url())),
+  botAdminRefText: v.optional(v.string()),
 
   // Postgres connection
   postgresUser: v.optional(v.string()),

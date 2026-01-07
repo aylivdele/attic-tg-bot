@@ -69,6 +69,7 @@ feature
 const bootcamp1 = `${signalsBootcampCallbackData}1`
 const bootcamp2 = `${signalsBootcampCallbackData}2`
 const bootcamp3 = `${signalsBootcampCallbackData}3`
+const bootcamp4 = `${signalsBootcampCallbackData}4`
 
 feature.callbackQuery(signalsBootcampCallbackData, async (ctx) => {
   ctx.notifyAdmin(`Пользователь заинтересовался покупкой сигналов: @${ctx.from.username}`)
@@ -77,15 +78,15 @@ feature.callbackQuery(signalsBootcampCallbackData, async (ctx) => {
   ctx.updateUserState(signalsBootcampCallbackData)
   return ctx.answerWithMedia(signalsBootcampCallbackData, `Чтобы получить доступ к сигналам и обучению по работе с ними, выполни несколько шагов 👇
 
-1. Зарегистрируйся на бирже BingX по специальной ссылке:
-https://bingx.com/partner/attic/`, { keyboard: signalsBootcampKeyboard(scenarioSignalsCallbackData, bootcamp1), leaveLastMessage: ctx.session.userInfo?.previous_state === scenarioSignalsCallbackData })
+1. Зарегистрируйся на бирже Bitget по специальной ссылке:
+https://partner.bitget.com/bg/ATTIC`, { keyboard: signalsBootcampKeyboard(scenarioSignalsCallbackData, bootcamp1), leaveLastMessage: ctx.session.userInfo?.previous_state === scenarioSignalsCallbackData })
 })
 
 feature.callbackQuery(bootcamp1, async (ctx) => {
   await ctx.answerCallbackQuery()
   ctx.updateUserState(bootcamp1)
   return ctx.answerWithMedia(bootcamp1, `2. Зарегистрируйся на сайте ATTIC по моей ссылке:
-https://atticalgo.com?promocode=DlAdyKE0SK
+${ctx.config.botAdminRefUrl}
 
 *Регистрация именно по этой ссылке откроет доступ к скидке на сигналы и другие продукты компании`, { keyboard: signalsBootcampKeyboard(scenarioSignalsCallbackData, bootcamp2), leaveLastMessage: true })
 })
@@ -93,21 +94,28 @@ https://atticalgo.com?promocode=DlAdyKE0SK
 feature.callbackQuery(bootcamp2, async (ctx) => {
   await ctx.answerCallbackQuery()
   ctx.updateUserState(bootcamp2)
-  return ctx.answerWithMedia(bootcamp2, `3. В личном кабинете ATTIC зайди в “Настройки → Биржи” и добавь свой UID
-(его можно найти в профиле BingX)`, { keyboard: signalsBootcampKeyboard(scenarioSignalsCallbackData, bootcamp3), leaveLastMessage: true })
+  return ctx.answerWithMedia(bootcamp2, `3. Перейди в меню “Продукты”, далее “СИГНАЛЫ”, выбери желаемые группы и произведи оплату
+(В видео выше я показываю как это сделать)`, { keyboard: signalsBootcampKeyboard(scenarioSignalsCallbackData, bootcamp3), leaveLastMessage: true })
 })
 
 feature.callbackQuery(bootcamp3, async (ctx) => {
   await ctx.answerCallbackQuery()
   ctx.updateUserState(bootcamp3)
-  return ctx.answerWithMedia(bootcamp3, `4. Перейди в меню “Продукты”, далее “SIGNALS” и выбери нужные группы
-(В видео выше я показываю как это сделать)
+  return ctx.answerWithMedia(bootcamp3, `4. Зарегистрируйся на основной бирже BingX по ссылке ниже:
+https://bingx.com/partner/attic/`, { keyboard: signalsBootcampKeyboard(scenarioSignalsCallbackData, bootcamp4), leaveLastMessage: true })
+})
 
-5. После оплаты доступ откроется автоматически для каждой выбранной группы
+feature.callbackQuery(bootcamp4, async (ctx) => {
+  await ctx.answerCallbackQuery()
+  ctx.updateUserState(bootcamp4)
+  return ctx.answerWithMedia(bootcamp4, `5. В личном кабинете ATTIC зайди в “Настройки → Биржи” и добавь свой UID
+(его можно найти в профиле BingX)
+
+6. После оплаты и ввода UID на сайте, доступ откроется автоматически для каждой выбранной группы
 
 Готово! ✅
 
-💡 После выполнения шага 3(при условии регистрации по моей ссылке) у тебя также откроются 3 урока в нашей CRYPTO SCHOOL, где ты разберёшься, как правильно открывать сделки по сигналам.
+💡 После выполнения шага 2 (при условии регистрации по моей ссылке) у тебя также откроются 3 урока в нашей CRYPTO SCHOOL, где ты разберёшься как правильно открывать сделки по сигналам.
 
 Если хочешь - <b>напиши мне лично, и я помогу пройти все шаги и быстрее втянуться в нишу.</b>`, { keyboard: signalsBootcampKeyboard(scenarioSignalsCallbackData), leaveLastMessage: true, parseMode: 'HTML' })
 })

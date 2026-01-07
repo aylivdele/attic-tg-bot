@@ -32,6 +32,7 @@ feature
 const bootcamp1 = `${tradingBootcampCallbackData}1`
 const bootcamp2 = `${tradingBootcampCallbackData}2`
 const bootcamp3 = `${tradingBootcampCallbackData}3`
+const bootcamp4 = `${tradingBootcampCallbackData}4`
 
 feature.callbackQuery(tradingBootcampCallbackData, async (ctx) => {
   ctx.notifyAdmin(`Пользователь заинтересовался покупкой Trading Course: @${ctx.from.username}`)
@@ -40,31 +41,38 @@ feature.callbackQuery(tradingBootcampCallbackData, async (ctx) => {
   ctx.updateUserState(tradingBootcampCallbackData)
   return ctx.answerWithMedia(tradingBootcampCallbackData, `Чтобы получить доступ к школе по трейдингу и начать обучение, выполни несколько простых шагов 👇
 
-1. Зарегистрируйся на сайте ATTIC по моей ссылке:
-https://atticalgo.com?promocode=DlAdyKE0SK
-
-*Регистрация именно по этой ссылке откроет доступ к скидке на курсы и другие продукты компании`, { keyboard: tradingBootcampKeyboard(scenarioTradingCallbackData, bootcamp1), leaveLastMessage: ctx.session.userInfo?.previous_state === scenarioTradingCallbackData })
+1️. Зарегистрируйся на бирже Bitget по специальной ссылке:
+https://partner.bitget.com/bg/ATTIC`, { keyboard: tradingBootcampKeyboard(scenarioTradingCallbackData, bootcamp1), leaveLastMessage: ctx.session.userInfo?.previous_state === scenarioTradingCallbackData })
 })
 
 feature.callbackQuery(bootcamp1, async (ctx) => {
   await ctx.answerCallbackQuery()
   ctx.updateUserState(bootcamp1)
-  return ctx.answerWithMedia(bootcamp1, `2. Войди в личный кабинет и открой раздел “Продукты → COURSES”.
+  return ctx.answerWithMedia(bootcamp1, `2. Зарегистрируйся на сайте ATTIC по моей ссылке:
+${ctx.config.botAdminRefUrl}
 
-3. Перейди к оплате и активируй курс.`, { keyboard: tradingBootcampKeyboard(scenarioTradingCallbackData, bootcamp2), leaveLastMessage: true })
+*Регистрация именно по этой ссылке откроет доступ к скидке на курсы и другие продукты компании`, { keyboard: tradingBootcampKeyboard(scenarioTradingCallbackData, bootcamp2), leaveLastMessage: true })
 })
 
 feature.callbackQuery(bootcamp2, async (ctx) => {
   await ctx.answerCallbackQuery()
   ctx.updateUserState(bootcamp2)
-  return ctx.answerWithMedia(bootcamp2, `4. Зарегистрируйся на бирже BingX по специальной ссылке:
-https://bingx.com/partner/attic/`, { keyboard: tradingBootcampKeyboard(scenarioTradingCallbackData, bootcamp3), leaveLastMessage: true })
+  return ctx.answerWithMedia(bootcamp2, `3. Открой раздел “Продукты” и выбери TRADING COURSE.
+
+4. Перейди к оплате и активируй курс.`, { keyboard: tradingBootcampKeyboard(scenarioTradingCallbackData, bootcamp3), leaveLastMessage: true })
 })
 
 feature.callbackQuery(bootcamp3, async (ctx) => {
   await ctx.answerCallbackQuery()
   ctx.updateUserState(bootcamp3)
-  return ctx.answerWithMedia(bootcamp3, `5. В личном кабинете ATTIC зайди в “Настройки → Биржи” и добавь свой UID
+  return ctx.answerWithMedia(bootcamp3, `5. Зарегистрируйся на основной бирже BingX по ссылке ниже:
+https://bingx.com/partner/attic/`, { keyboard: tradingBootcampKeyboard(scenarioTradingCallbackData, bootcamp4), leaveLastMessage: true })
+})
+
+feature.callbackQuery(bootcamp4, async (ctx) => {
+  await ctx.answerCallbackQuery()
+  ctx.updateUserState(bootcamp4)
+  return ctx.answerWithMedia(bootcamp4, `6. В личном кабинете ATTIC зайди в “Настройки → Биржи” и добавь свой UID
 (его можно найти в профиле BingX)
 
 Готово! ✅

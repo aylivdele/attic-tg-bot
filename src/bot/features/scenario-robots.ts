@@ -70,6 +70,7 @@ feature.callbackQuery([statisticsRDescription, statisticsAIDescription, statisti
 const bootcamp1 = `${robotsBootcampCallbackData}1`
 const bootcamp2 = `${robotsBootcampCallbackData}2`
 const bootcamp3 = `${robotsBootcampCallbackData}3`
+const bootcamp4 = `${robotsBootcampCallbackData}4`
 
 feature.callbackQuery(robotsBootcampCallbackData, async (ctx) => {
   ctx.notifyAdmin(`Пользователь изучает как подключить роботов: @${ctx.from.username}`)
@@ -77,15 +78,15 @@ feature.callbackQuery(robotsBootcampCallbackData, async (ctx) => {
   ctx.updateUserState(robotsBootcampCallbackData)
   return ctx.answerWithMedia(robotsBootcampCallbackData, `Чтобы получить доступ к торговым роботам, выполни всего несколько шагов 👇
 
-1. Зарегистрируйся на бирже BingX по специальной ссылке:
-https://bingx.com/partner/attic/`, { keyboard: robotsBootcampKeyboard(scenarioRobotsCallbackData, bootcamp1), leaveLastMessage: ctx.session.userInfo?.previous_state === scenarioRobotsCallbackData })
+1. Зарегистрируйся на бирже Bitget по специальной ссылке:
+https://partner.bitget.com/bg/ATTIC`, { keyboard: robotsBootcampKeyboard(scenarioRobotsCallbackData, bootcamp1), leaveLastMessage: ctx.session.userInfo?.previous_state === scenarioRobotsCallbackData })
 })
 
 feature.callbackQuery(bootcamp1, async (ctx) => {
   await ctx.answerCallbackQuery()
   ctx.updateUserState(bootcamp1)
   return ctx.answerWithMedia(bootcamp1, `2. Зарегистрируйся на сайте ATTIC по моей ссылке:
-https://atticalgo.com?promocode=DlAdyKE0SK
+${ctx.config.botAdminRefUrl}
 
 *Регистрация именно по моей ссылке откроет доступ к бесплатным урокам по крипте`, { keyboard: robotsBootcampKeyboard(scenarioRobotsCallbackData, bootcamp2), leaveLastMessage: true })
 })
@@ -93,14 +94,21 @@ https://atticalgo.com?promocode=DlAdyKE0SK
 feature.callbackQuery(bootcamp2, async (ctx) => {
   await ctx.answerCallbackQuery()
   ctx.updateUserState(bootcamp2)
-  return ctx.answerWithMedia(bootcamp2, `3. В личном кабинете ATTIC зайди в “Настройки → Биржи” и добавь свой UID
-(его можно найти в профиле BingX)`, { keyboard: robotsBootcampKeyboard(scenarioRobotsCallbackData, bootcamp3), leaveLastMessage: true })
+  return ctx.answerWithMedia(bootcamp2, `3. Заходи в меню “Тарифы” на сайте ATTIC, выбирай тариф PRO (именно он открывает доступ ко всем роботам) и произведи оплату(В видео выше я показываю как это сделать)`, { keyboard: robotsBootcampKeyboard(scenarioRobotsCallbackData, bootcamp3), leaveLastMessage: true })
 })
 
 feature.callbackQuery(bootcamp3, async (ctx) => {
   await ctx.answerCallbackQuery()
   ctx.updateUserState(bootcamp3)
-  return ctx.answerWithMedia(bootcamp3, `4. Заходи в меню “Тарифы” на сайте ATTIC и выбирай тариф PRO (именно он открывает доступ ко всем роботам)
+  return ctx.answerWithMedia(bootcamp3, `4. Зарегистрируйся на основной бирже BingX по ссылке ниже:
+https://bingx.com/partner/attic/`, { keyboard: robotsBootcampKeyboard(scenarioRobotsCallbackData, bootcamp4), leaveLastMessage: true })
+})
+
+feature.callbackQuery(bootcamp4, async (ctx) => {
+  await ctx.answerCallbackQuery()
+  ctx.updateUserState(bootcamp4)
+  return ctx.answerWithMedia(bootcamp4, `5. В личном кабинете ATTIC зайди в “Настройки → Биржи” и добавь свой UID
+(его можно найти в профиле BingX)
 
 После успешной оплаты свяжись с поддержкой (@atticsupport1), чтобы получить персональную ссылку на подключение к роботам
 

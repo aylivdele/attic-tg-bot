@@ -1,6 +1,6 @@
 import type { Context } from '#root/bot/context.js'
 import { partnershipBootcampCallbackData, scenarioPartnershipCallbackData } from '#root/bot/callback-data/callbacks-partnership.js'
-import { mainpartnershipKeyboard, partnershipBootcampKeyboard } from '#root/bot/keyboards/partnership-keyboards.js'
+import { mainPartnershipKeyboard, partnershipBootcampKeyboard } from '#root/bot/keyboards/partnership-keyboards.js'
 import { Composer } from 'grammy'
 
 const composer = new Composer<Context>()
@@ -13,12 +13,13 @@ feature
 
     await ctx.answerCallbackQuery()
     ctx.updateUserState(scenarioPartnershipCallbackData)
-    return ctx.answerWithMedia(scenarioPartnershipCallbackData, `Видео о том как я в 21 год купила ролекс, улетела жить в мексику и купила маме квартиру.`, { keyboard: mainpartnershipKeyboard() })
+    return ctx.answerWithMedia(scenarioPartnershipCallbackData, ctx.config.botAdminRefText, { keyboard: mainPartnershipKeyboard(), parseMode: 'HTML' })
   })
 
 const bootcamp1 = `${partnershipBootcampCallbackData}1`
 const bootcamp2 = `${partnershipBootcampCallbackData}2`
 const bootcamp3 = `${partnershipBootcampCallbackData}3`
+const bootcamp4 = `${partnershipBootcampCallbackData}4`
 
 feature.callbackQuery(partnershipBootcampCallbackData, async (ctx) => {
   ctx.notifyAdmin(`Пользователь заинтересовался покупкой партнерского тарифа: @${ctx.from.username}`)
@@ -27,15 +28,15 @@ feature.callbackQuery(partnershipBootcampCallbackData, async (ctx) => {
   ctx.updateUserState(partnershipBootcampCallbackData)
   return ctx.answerWithMedia(partnershipBootcampCallbackData, `Чтобы получить доступ к партнерской сети и нашей команде, выполни несколько простых шагов 👇
 
-1. Зарегистрируйся на бирже BingX по специальной ссылке:
-https://bingx.com/partner/attic/`, { keyboard: partnershipBootcampKeyboard(scenarioPartnershipCallbackData, bootcamp1), leaveLastMessage: ctx.session.userInfo?.previous_state === scenarioPartnershipCallbackData })
+1. Зарегистрируйся на бирже Bitget по специальной ссылке:
+https://partner.bitget.com/bg/ATTIC`, { keyboard: partnershipBootcampKeyboard(scenarioPartnershipCallbackData, bootcamp1), leaveLastMessage: ctx.session.userInfo?.previous_state === scenarioPartnershipCallbackData })
 })
 
 feature.callbackQuery(bootcamp1, async (ctx) => {
   await ctx.answerCallbackQuery()
   ctx.updateUserState(bootcamp1)
   return ctx.answerWithMedia(bootcamp1, `2. Зарегистрируйся на сайте ATTIC по моей ссылке:
-https://atticalgo.com?promocode=DlAdyKE0SK
+${ctx.config.botAdminRefUrl}
 
 *Регистрация именно по этой ссылке откроет доступ к скидке на тарифы и другие продукты компании`, { keyboard: partnershipBootcampKeyboard(scenarioPartnershipCallbackData, bootcamp2), leaveLastMessage: true })
 })
@@ -43,17 +44,24 @@ https://atticalgo.com?promocode=DlAdyKE0SK
 feature.callbackQuery(bootcamp2, async (ctx) => {
   await ctx.answerCallbackQuery()
   ctx.updateUserState(bootcamp2)
-  return ctx.answerWithMedia(bootcamp2, `3. Перейди в меню “Тарифы” и выбери желаемый партнерский тариф
+  return ctx.answerWithMedia(bootcamp2, `3. Перейди в меню “Тарифы”, выбери желаемый партнерский тариф и произведи оплату
 (В видео выше я показываю как это сделать)`, { keyboard: partnershipBootcampKeyboard(scenarioPartnershipCallbackData, bootcamp3), leaveLastMessage: true })
 })
 
 feature.callbackQuery(bootcamp3, async (ctx) => {
   await ctx.answerCallbackQuery()
   ctx.updateUserState(bootcamp3)
-  return ctx.answerWithMedia(bootcamp3, `4. В личном кабинете ATTIC зайди в “Настройки → Биржи” и добавь свой UID
+  return ctx.answerWithMedia(bootcamp3, `4. Зарегистрируйся на основной бирже BingX по ссылке ниже:
+https://bingx.com/partner/attic/`, { keyboard: partnershipBootcampKeyboard(scenarioPartnershipCallbackData, bootcamp4), leaveLastMessage: true })
+})
+
+feature.callbackQuery(bootcamp4, async (ctx) => {
+  await ctx.answerCallbackQuery()
+  ctx.updateUserState(bootcamp4)
+  return ctx.answerWithMedia(bootcamp4, `5. В личном кабинете ATTIC зайди в “Настройки → Биржи” и добавь свой UID
 (его можно найти в профиле BingX)
 
-5. После оплаты тарифа тебе откроется доступ к нашим командным чатам и моему сопровождению
+6. После оплаты тарифа и ввода UID на сайте тебе откроется доступ к нашим командным чатам и моему сопровождению
 Также, после оплаты напиши мне “Я в игре” и я отправлю тебе гайд с помощью которого уже десятки человек заработали больше миллиона рублей с партнерской программы
 
 Готово! ✅

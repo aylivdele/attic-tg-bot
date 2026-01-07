@@ -3,7 +3,7 @@ import { startMenuCallbackData } from '#root/bot/callback-data/callbacks-start.j
 import { directMessageCallbackData, shortDirectMessageCallbackData } from '#root/bot/callback-data/direct-message.js'
 import { InlineKeyboard } from 'grammy'
 
-export function mainpartnershipKeyboard() {
+export function mainPartnershipKeyboard() {
   return InlineKeyboard.from([
     [{ text: '💎 Попасть в команду', callback_data: partnershipBootcampCallbackData }],
     [{ text: '🚀 В начало', callback_data: startMenuCallbackData }],
