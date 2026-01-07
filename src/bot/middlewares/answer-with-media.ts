@@ -24,7 +24,12 @@ async function answerWithMedia(ctx: Context, messageId: string, text?: string | 
   if (media && media.length > 0) {
     try {
       if (ctx.update.callback_query) {
-        await ctx.editMessageReplyMarkup(undefined)
+        if (ctx.update.callback_query.message?.text === chooseNextStepMessage) {
+          await ctx.deleteMessage()
+        }
+        else {
+          await ctx.editMessageReplyMarkup(undefined)
+        }
       }
     }
     catch (e) {
@@ -46,7 +51,7 @@ async function answerWithMedia(ctx: Context, messageId: string, text?: string | 
             }
             splicedArrays[splicedArrays.length - 1].push(preparedMedia[i])
           }
-          if (splicedArrays.length > 0) {
+          if (splicedArrays.length > 0 && !!text && text?.length < 1000) {
             splicedArrays[splicedArrays.length - 1][0].caption = text
             splicedArrays[splicedArrays.length - 1][0].parse_mode = parseMode
             splicedArrays[splicedArrays.length - 1][0].caption_entities = entities

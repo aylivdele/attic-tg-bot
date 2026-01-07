@@ -1,5 +1,6 @@
 import type { Context } from '#root/bot/context.js'
 import { partnershipBootcampCallbackData, scenarioPartnershipCallbackData } from '#root/bot/callback-data/callbacks-partnership.js'
+import { getRefText } from '#root/bot/helpers/refText.js'
 import { mainPartnershipKeyboard, partnershipBootcampKeyboard } from '#root/bot/keyboards/partnership-keyboards.js'
 import { Composer } from 'grammy'
 
@@ -13,7 +14,7 @@ feature
 
     await ctx.answerCallbackQuery()
     ctx.updateUserState(scenarioPartnershipCallbackData)
-    return ctx.answerWithMedia(scenarioPartnershipCallbackData, ctx.config.botAdminRefText, { keyboard: mainPartnershipKeyboard(), parseMode: 'HTML' })
+    return ctx.answerWithMedia(scenarioPartnershipCallbackData, getRefText(), { keyboard: mainPartnershipKeyboard(), parseMode: 'HTML' })
   })
 
 const bootcamp1 = `${partnershipBootcampCallbackData}1`
