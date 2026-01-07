@@ -57,12 +57,19 @@ async function answerWithMedia(ctx: Context, messageId: string, text?: string | 
       if (['video', 'photo'].includes(cur.media_type)) {
         if (!skipPhotoVideo) {
           const preparedMedia: (InputMediaPhoto | InputMediaVideo)[] = media.filter(m => ['video', 'photo'].includes(m.media_type)).map(m => ({ type: m.media_type === 'video' ? 'video' : 'photo', media: m.file_id }))
-          if (media.length === 1 && ctx.update.callback_query) {
+          if (media.length === 1) {
             const m = preparedMedia[0]
             m.caption = text
             m.parse_mode = parseMode
             m.caption_entities = entities
-            return await ctx.editMessageMedia(m, { reply_markup: keyboard })
+            if (ctx.update.callback_query) {
+              return await ctx.editMessageMedia(m, { reply_markup: keyboard })
+            }
+            else {
+              if (m.type === 'photo') {
+                return await ctx.replyWithPhoto(m.media, { reply_markup: keyboard, caption: text, caption_entities: entities, parse_mode: parseMode })
+              }
+            }
           }
           else {
             const splicedArrays: ((InputMediaPhoto | InputMediaVideo)[])[] = []
