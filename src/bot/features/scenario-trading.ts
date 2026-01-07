@@ -41,7 +41,7 @@ feature.callbackQuery(tradingBootcampCallbackData, async (ctx) => {
   ctx.updateUserState(tradingBootcampCallbackData)
   return ctx.answerWithMedia(tradingBootcampCallbackData, `Чтобы получить доступ к школе по трейдингу и начать обучение, выполни несколько простых шагов 👇
 
-1️. Зарегистрируйся на бирже Bitget по специальной ссылке:
+1. Зарегистрируйся на бирже Bitget по специальной ссылке:
 https://partner.bitget.com/bg/ATTIC`, { keyboard: tradingBootcampKeyboard(scenarioTradingCallbackData, bootcamp1), leaveLastMessage: ctx.session.userInfo?.previous_state === scenarioTradingCallbackData })
 })
 
