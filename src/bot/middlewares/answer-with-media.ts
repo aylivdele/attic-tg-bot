@@ -52,6 +52,20 @@ async function answerWithMedia(ctx: Context, messageId: string, text?: string | 
               return await ctx.editMessageMedia(m, { reply_markup: keyboard })
             }
             else {
+              try {
+                if (ctx.update.callback_query) {
+                  if (!leaveLastMessage && ctx.update.callback_query.message?.text === chooseNextStepMessage) {
+                    await ctx.deleteMessage()
+                  }
+                  else {
+                    await ctx.editMessageReplyMarkup(undefined)
+                  }
+                }
+              }
+              catch (e) {
+                ctx.logger.error('Failed to remove inline keyboard:', e)
+              }
+
               if (m.type === 'photo') {
                 return await ctx.replyWithPhoto(m.media, { reply_markup: keyboard, caption: text, caption_entities: entities, parse_mode: parseMode })
               }
