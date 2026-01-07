@@ -57,7 +57,7 @@ async function answerWithMedia(ctx: Context, messageId: string, text?: string | 
       if (['video', 'photo'].includes(cur.media_type)) {
         if (!skipPhotoVideo) {
           const preparedMedia: (InputMediaPhoto | InputMediaVideo)[] = media.filter(m => ['video', 'photo'].includes(m.media_type)).map(m => ({ type: m.media_type === 'video' ? 'video' : 'photo', media: m.file_id }))
-          if (media.length === 1) {
+          if (media.length === 1 && ctx.update.callback_query) {
             const m = preparedMedia[0]
             m.caption = text
             m.parse_mode = parseMode
