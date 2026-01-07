@@ -21,10 +21,22 @@ async function answerWithMedia(ctx: Context, messageId: string, text?: string | 
   }
   const media = await getMediaForMessage(messageId, ctx.db)
   text = text || undefined
+
+  let leaveLastMessage = options?.leaveLastMessage
+  if (ctx.update.callback_query?.message?.video) {
+    leaveLastMessage = true
+  }
+  else if (ctx.update.callback_query?.message?.text === chooseNextStepMessage) {
+    leaveLastMessage = false
+  }
+  else if (ctx.session.userInfo?.previous_state?.includes('bootcamp')) {
+    leaveLastMessage = true
+  }
+
   if (media && media.length > 0) {
     try {
       if (ctx.update.callback_query) {
-        if (ctx.update.callback_query.message?.text === chooseNextStepMessage) {
+        if (!leaveLastMessage && ctx.update.callback_query.message?.text === chooseNextStepMessage) {
           await ctx.deleteMessage()
         }
         else {
@@ -38,28 +50,38 @@ async function answerWithMedia(ctx: Context, messageId: string, text?: string | 
 
     let skipPhotoVideo = false
     let skipText = false
+    const skipKeyboard = false
 
     for (let i = 0; i < media.length; i++) {
       const cur = media[i]
       if (['video', 'photo'].includes(cur.media_type)) {
         if (!skipPhotoVideo) {
           const preparedMedia: (InputMediaPhoto | InputMediaVideo)[] = media.filter(m => ['video', 'photo'].includes(m.media_type)).map(m => ({ type: m.media_type === 'video' ? 'video' : 'photo', media: m.file_id }))
-          const splicedArrays: ((InputMediaPhoto | InputMediaVideo)[])[] = []
-          for (let i = 0; i < preparedMedia.length; i++) {
-            if (i % 10 === 0) {
-              splicedArrays.push([])
+          if (media.length === 1) {
+            const m = preparedMedia[0]
+            m.caption = text
+            m.parse_mode = parseMode
+            m.caption_entities = entities
+            return await ctx.editMessageMedia(m, { reply_markup: keyboard })
+          }
+          else {
+            const splicedArrays: ((InputMediaPhoto | InputMediaVideo)[])[] = []
+            for (let i = 0; i < preparedMedia.length; i++) {
+              if (i % 10 === 0) {
+                splicedArrays.push([])
+              }
+              splicedArrays[splicedArrays.length - 1].push(preparedMedia[i])
             }
-            splicedArrays[splicedArrays.length - 1].push(preparedMedia[i])
-          }
-          if (splicedArrays.length > 0 && !!text && text?.length < 1000) {
-            splicedArrays[splicedArrays.length - 1][0].caption = text
-            splicedArrays[splicedArrays.length - 1][0].parse_mode = parseMode
-            splicedArrays[splicedArrays.length - 1][0].caption_entities = entities
-            skipText = true
-          }
-          skipPhotoVideo = true
-          for (const subArr of splicedArrays) {
-            await ctx.replyWithMediaGroup(subArr)
+            if (splicedArrays.length > 0 && !!text && text?.length < 1000) {
+              splicedArrays[splicedArrays.length - 1][0].caption = text
+              splicedArrays[splicedArrays.length - 1][0].parse_mode = parseMode
+              splicedArrays[splicedArrays.length - 1][0].caption_entities = entities
+              skipText = true
+            }
+            skipPhotoVideo = true
+            for (const subArr of splicedArrays) {
+              await ctx.replyWithMediaGroup(subArr)
+            }
           }
         }
       }
@@ -75,6 +97,10 @@ async function answerWithMedia(ctx: Context, messageId: string, text?: string | 
           await ctx.replyWithVoice(cur.file_id)
           break
       }
+    }
+
+    if (skipKeyboard) {
+      return Promise.resolve()
     }
 
     return ctx.reply((!skipText && !!text) ? text : chooseNextStepMessage, { reply_markup: keyboard, entities, link_preview_options: linkPreviewOptions, parse_mode: parseMode })
@@ -156,17 +182,6 @@ async function answerWithMedia(ctx: Context, messageId: string, text?: string | 
   // } catch (e) {
   //   ctx.logger.error('Failed to remove media from message:', e)
   // }
-  }
-
-  let leaveLastMessage = options?.leaveLastMessage
-  if (ctx.update.callback_query?.message?.video) {
-    leaveLastMessage = true
-  }
-  else if (ctx.update.callback_query?.message?.text === chooseNextStepMessage) {
-    leaveLastMessage = false
-  }
-  else if (ctx.session.userInfo?.previous_state?.includes('bootcamp')) {
-    leaveLastMessage = true
   }
   if (!!ctx.update.callback_query?.message?.text && !leaveLastMessage) {
     return ctx.editMessageText(text || chooseNextStepMessage, { reply_markup: keyboard, entities, link_preview_options: linkPreviewOptions, parse_mode: parseMode })
