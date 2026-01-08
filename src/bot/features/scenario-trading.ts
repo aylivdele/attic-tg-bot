@@ -49,7 +49,7 @@ feature.callbackQuery(bootcamp1, async (ctx) => {
   await ctx.answerCallbackQuery()
   ctx.updateUserState(bootcamp1)
   return ctx.answerWithMedia(bootcamp1, `2. Зарегистрируйся на сайте ATTIC по моей ссылке:
-${ctx.config.botAdminRefUrl}
+https://atticalgo.com?promocode=${ctx.config.botAdminRefUrlCode}
 
 <i>*Регистрация именно по этой ссылке откроет доступ к скидке на курсы и другие продукты компании</i>`, { parseMode: 'HTML', keyboard: tradingBootcampKeyboard(scenarioTradingCallbackData, bootcamp2), leaveLastMessage: true })
 })

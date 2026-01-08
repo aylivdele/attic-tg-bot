@@ -1,11 +1,12 @@
 import { startMenuCallbackData } from '#root/bot/callback-data/callbacks-start.js'
 import { tradingBootcampCallbackData, tradingCasesCallbackData, tradingStatisticsCallbackData } from '#root/bot/callback-data/callbacks-trading.js'
 import { directMessageCallbackData, shortDirectMessageCallbackData } from '#root/bot/callback-data/direct-message.js'
+import { config } from '#root/config.js'
 import { InlineKeyboard } from 'grammy'
 
 export function mainTradingKeyboard() {
   return InlineKeyboard.from([
-    [{ text: '📙 Cодержание курса', callback_data: tradingStatisticsCallbackData, url: 'https://atticalgo.com/app/learning/trading?promocode=DlAdyKE0SK' }],
+    [{ text: '📙 Cодержание курса', callback_data: tradingStatisticsCallbackData, url: `https://atticalgo.com/app/learning/trading?promocode=${config.botAdminRefUrlCode}` }],
     [{ text: '🏆 Кейсы', callback_data: `cases|${tradingCasesCallbackData}` }],
     [{ text: '💳 Купить курс', callback_data: tradingBootcampCallbackData }],
     [{ text: '🚀 В начало', callback_data: startMenuCallbackData }],

@@ -1,11 +1,12 @@
 import { cryptoBootcampCallbackData, cryptoCasesCallbackData, cryptoSummaryCallbackData, scenarioCryptoCallbackData } from '#root/bot/callback-data/callbacks-crypto.js'
 import { startMenuCallbackData } from '#root/bot/callback-data/callbacks-start.js'
 import { directMessageCallbackData, shortDirectMessageCallbackData } from '#root/bot/callback-data/direct-message.js'
+import { config } from '#root/config.js'
 import { InlineKeyboard } from 'grammy'
 
 export function mainCryptoKeyboard() {
   return InlineKeyboard.from([
-    [{ text: '📘 Содержание курса', callback_data: cryptoSummaryCallbackData, url: 'https://atticalgo.com/app/learning/crypto?promocode=DlAdyKE0SK' }],
+    [{ text: '📘 Содержание курса', callback_data: cryptoSummaryCallbackData, url: `https://atticalgo.com/app/learning/crypto?promocode=${config.botAdminRefUrlCode}` }],
     [{ text: '🏆 Кейсы', callback_data: `cases|${cryptoCasesCallbackData}` }],
     [{ text: '💳 Купить курс', callback_data: cryptoBootcampCallbackData }],
     [{ text: '🚀 В начало', callback_data: startMenuCallbackData }],
