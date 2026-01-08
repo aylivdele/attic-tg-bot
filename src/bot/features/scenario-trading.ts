@@ -60,6 +60,7 @@ feature.callbackQuery(bootcamp2, async (ctx) => {
   return ctx.answerWithMedia(bootcamp2, `3. Открой раздел “Продукты” и выбери TRADING COURSE.
 
 4. Перейди к оплате и активируй курс.
+
 <b>*Если у тебя появляются сложности или нужна помощь, то пиши мне, я на связи</b>`, { keyboard: tradingBootcampKeyboard(scenarioTradingCallbackData, bootcamp3), leaveLastMessage: true, parseMode: 'HTML' })
 })
 

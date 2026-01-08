@@ -95,6 +95,7 @@ feature.callbackQuery(bootcamp2, async (ctx) => {
   await ctx.answerCallbackQuery()
   ctx.updateUserState(bootcamp2)
   return ctx.answerWithMedia(bootcamp2, `3. Заходи в меню “Тарифы” на сайте ATTIC, выбирай тариф PRO (именно он открывает доступ ко всем роботам) и произведи оплату(В видео выше я показываю как это сделать)
+
 <b>*Если у тебя появляются сложности или нужна помощь, то пиши мне, я на связи</b>`, { keyboard: robotsBootcampKeyboard(scenarioRobotsCallbackData, bootcamp3), leaveLastMessage: true, parseMode: 'HTML' })
 })
 
