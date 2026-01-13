@@ -59,7 +59,7 @@ export function insertNewUser(from: User, db: Database) {
 }
 
 export function updateUserInfo(user: UserRecord, db: Database) {
-  return db.query('update users set current_state = $1, previous_state = $2, last_update =$3 where id = $4 and bot_id = $5', [user.current_state, user.previous_state, user.last_update, user.id, user.bot_id])
+  return db.query('update users set current_state = $1, previous_state = $2, last_update = $3 where id = $4 and bot_id = $5', [user.current_state, user.previous_state, user.last_update, user.id, user.bot_id])
 }
 
 export interface Case {

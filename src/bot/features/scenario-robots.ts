@@ -1,6 +1,7 @@
 import type { Context } from '#root/bot/context.js'
 import { robotsBootcampCallbackData, robotsStatisticsCallbackData, scenarioRobotsCallbackData, statisticsAIDescription, statisticsMDescription, statisticsRDescription } from '#root/bot/callback-data/callbacks-robots.js'
 import { mainRobotsKeyboard, robotsBootcampKeyboard, robotsStatisticsKeyboard } from '#root/bot/keyboards/robots-keyboards.js'
+import { getMediaForMessage } from '#root/database/queries.js'
 import { Composer } from 'grammy'
 
 const composer = new Composer<Context>()
@@ -48,23 +49,13 @@ feature
 
 feature.callbackQuery([statisticsRDescription, statisticsAIDescription, statisticsMDescription], async (ctx) => {
   await ctx.answerCallbackQuery()
-  let fileId: string | undefined
-  switch (ctx.callbackQuery.data) {
-    case statisticsAIDescription:
-      fileId = 'BQACAgIAAxkBAAIBZWlSOx83ApgtAkp-AzIe86J3MfttAAJ1iAAC3zyYSgbCHQhDGTjxNgQ'
-      break
-    case statisticsRDescription:
-      fileId = 'BQACAgIAAxkBAAIBaWlSPS4cJ6ZDtmCiqkO3BS7W0HdJAAKYiAAC3zyYSmRsNULyCXCENgQ'
-      break
-    case statisticsMDescription:
-      fileId = 'BQACAgIAAxkBAAIBZ2lSPQJvMakoRG2qNjyYID8iVdwhAAKTiAAC3zyYSnZm2kSHDaWWNgQ'
-      break
-  }
-  if (fileId === undefined) {
-    return
-  }
-  ctx.editMessageReplyMarkup()
-  return ctx.replyWithDocument(fileId, { reply_markup: robotsStatisticsKeyboard(ctx.callbackQuery.data) })
+  return getMediaForMessage(ctx.callbackQuery.data, ctx.db).then((media) => {
+    if (!media || media[0].media_type !== 'document' || media[0].file_id === undefined) {
+      return
+    }
+    ctx.editMessageReplyMarkup()
+    return ctx.replyWithDocument(media[0].file_id, { reply_markup: robotsStatisticsKeyboard(ctx.callbackQuery.data) })
+  })
 })
 
 const bootcamp1 = `${robotsBootcampCallbackData}1`
