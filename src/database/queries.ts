@@ -39,6 +39,7 @@ export interface UserRecord {
   last_update: number
   previous_state: string | null
   current_state: string | null
+  chat_id: number
 }
 
 export function getUserById(userId: number, db: Database): Promise<UserRecord | undefined> {
@@ -50,11 +51,11 @@ export function getUserById(userId: number, db: Database): Promise<UserRecord | 
   })
 }
 
-export function insertNewUser(from: User, db: Database) {
+export function insertNewUser(from: User, chatId: number, db: Database) {
   return db.query(
-    `INSERT INTO users (id, bot_id, first_name, last_name, username, current_state, previous_state, added_at, last_update)
-         VALUES ($1, $2, $3, $4, $5, $6, $6, $7, $7) on conflict (id, bot_id) do update set current_state = EXCLUDED.current_state`,
-    [from.id, getBotId(), from.first_name, from.last_name, from.username, startMenuCallbackData, Date.now()],
+    `INSERT INTO users (id, bot_id, first_name, last_name, username, current_state, previous_state, added_at, last_update, chat_id)
+         VALUES ($1, $2, $3, $4, $5, $6, $6, $7, $7, $8) on conflict (id, bot_id) do update set current_state = EXCLUDED.current_state`,
+    [from.id, getBotId(), from.first_name, from.last_name, from.username, startMenuCallbackData, Date.now(), chatId],
   )
 }
 

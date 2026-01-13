@@ -18,7 +18,8 @@ CREATE TABLE users (
     added_at BIGINT,
     last_update BIGINT,
     previous_state TEXT,
-    current_state TEXT
+    current_state TEXT,
+    chat_id BIGINT
 );
 
 ALTER TABLE users

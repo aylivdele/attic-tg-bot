@@ -18,7 +18,7 @@ feature.command(startMenuCallbackData, logHandle('command-start'), async (ctx) =
       await ctx.replyWithVideoNote(circle.file_id)
     }
   }
-  await insertNewUser(ctx.from, ctx.db)
+  await insertNewUser(ctx.from, ctx.chat.id, ctx.db)
   return await ctx.answerWithMedia(startMenuCallbackData, `Отлично, давай определимся, что тебе сейчас ближе 👇
 
 — Крипто-школа - для базового понимания криптовалют 
