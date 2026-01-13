@@ -97,7 +97,13 @@ feature.callbackQuery(bootcamp2, async (ctx) => {
   return ctx.answerWithMedia(bootcamp2, `3. Перейди в меню “Продукты”, далее “СИГНАЛЫ”, выбери желаемые группы и произведи оплату
 (В видео выше я показываю как это сделать)
 
-<b>*Если у тебя появляются сложности или нужна помощь, то пиши мне, я на связи</b>`, { keyboard: signalsBootcampKeyboard(scenarioSignalsCallbackData, bootcamp3), leaveLastMessage: true, parseMode: 'HTML' })
+<b>*Если у тебя появляются сложности или нужна помощь, то пиши мне, я на связи</b>
+
+<blockquote>Важный момент! Если ты первый раз скачал и зарегистрировал биржу BingX, то на ней есть правила, что при первой покупке криптовалюты в день регистрации, для твоей безопасности средства ограничиваются на 24 часа для вывода или оплаты
+
+Что бы не терять время, ты можешь связаться со мной и я дам доступ к трем бесплатным урокам что бы ты уже мог углубляться в рынок крипты</blockquote>
+
+<blockquote>Если у тебя уже была биржа BingX и ты просто вставил реф. код и перенес верификацию, то это на тебя не распространяется, ты можешь пользоваться криптой сразу</blockquote>`, { keyboard: signalsBootcampKeyboard(scenarioSignalsCallbackData, bootcamp3), leaveLastMessage: true, parseMode: 'HTML' })
 })
 
 // feature.callbackQuery(bootcamp3, async (ctx) => {

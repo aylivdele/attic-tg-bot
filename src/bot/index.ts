@@ -26,6 +26,7 @@ import { hydrate } from '@grammyjs/hydrate'
 import { hydrateReply, parseMode } from '@grammyjs/parse-mode'
 import { sequentialize } from '@grammyjs/runner'
 import { MemorySessionStorage, Bot as TelegramBot } from 'grammy'
+import { getBotId } from './helpers/botId.js'
 
 interface Dependencies {
   config: Config
@@ -94,7 +95,7 @@ export function createBot(token: string, dependencies: Dependencies, botConfig?:
   const _interval = setInterval(() => {
     const chatId = config.notificationChat
     if (chatId) {
-      query('UPDATE users SET last_update = 0 WHERE last_update <> 0 and last_update < $1 RETURNING username', [Date.now() - (1000 * 60 * 60 * 24)])
+      query('UPDATE users SET last_update = 0 WHERE bot_id = $1 last_update <> 0 and last_update < $2 RETURNING username', [getBotId(), Date.now() - (1000 * 60 * 60 * 24)])
         .then((res) => {
           if (!res?.rows) {
             return
