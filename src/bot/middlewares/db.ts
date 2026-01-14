@@ -10,9 +10,9 @@ export function dbMiddleware(): Middleware<Context> {
       getClient,
       pool,
     }
-    if (ctx.from) {
+    if (ctx.from && ctx.chat?.type === 'private') {
       ctx.session.userInfo = await getUserById(ctx.from.id, ctx.db)
-      if (!ctx.session.userInfo && ctx.update.message?.text !== '/start' && ctx.chat?.type === 'private') {
+      if (!ctx.session.userInfo && ctx.update.message?.text !== '/start') {
         await insertNewUser(ctx.from, ctx.chat.id, ctx.db)
         ctx.session.userInfo = await getUserById(ctx.from.id, ctx.db)
       }
