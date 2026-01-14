@@ -11,7 +11,7 @@ const feature = composer.chatType('private')
 
 feature.command(startMenuCallbackData, logHandle('command-start'), async (ctx) => {
   if (!ctx.session.userInfo) {
-    ctx.notifyAdmin(`Новый пользователь в боте: @${ctx.from.username}`)
+    ctx.notifyAdmin(`Новый пользователь в боте: @${ctx.from.username}`, ctx.from.username)
     const media = await getMediaForMessage(`${startMenuCallbackData}_circle`, ctx.db)
     const circle = media?.filter(m => m.media_type === 'videonote')?.[0]
     if (circle) {

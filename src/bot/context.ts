@@ -20,7 +20,7 @@ interface ExtendedContextFlavor {
   config: Config
   db: Database
   answerWithMedia: (messageId: string, text?: string | null, options?: AnswerOptions) => Promise<any>
-  notifyAdmin: (text: string) => Promise<any>
+  notifyAdmin: (text: string, username?: string) => Promise<any>
   updateUserState: (newState: string) => void
 }
 

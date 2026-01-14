@@ -9,6 +9,7 @@ const baseConfigSchema = v.object({
   botAllowedUpdates: v.optional(v.pipe(v.string(), v.transform(JSON.parse), v.array(v.picklist(API_CONSTANTS.ALL_UPDATE_TYPES))), '[]'),
   botAdmins: v.optional(v.pipe(v.string(), v.transform(JSON.parse), v.array(v.number())), '[]'),
   notificationChat: v.optional(v.pipe(v.string(), v.transform(Number), v.number())),
+  notificationSkipUsernames: v.optional(v.pipe(v.string(), v.transform(JSON.parse), v.array(v.string())), '[]'),
   botAdminUsername: v.optional(v.string()),
   botAdminRefUrlCode: v.optional(v.string(), ''),
   botAdminRefText: v.optional(v.string()),

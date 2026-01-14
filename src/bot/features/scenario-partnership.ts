@@ -10,7 +10,7 @@ const feature = composer.chatType('private')
 
 feature
   .callbackQuery(scenarioPartnershipCallbackData, async (ctx) => {
-    ctx.notifyAdmin(`Пользователь интересуется партнеркой: @${ctx.from.username}`)
+    ctx.notifyAdmin(`Пользователь интересуется партнеркой: @${ctx.from.username}`, ctx.from.username)
 
     await ctx.answerCallbackQuery()
     ctx.updateUserState(scenarioPartnershipCallbackData)
@@ -23,7 +23,7 @@ const bootcamp3 = `${partnershipBootcampCallbackData}3`
 // const bootcamp4 = `${partnershipBootcampCallbackData}4`
 
 feature.callbackQuery(partnershipBootcampCallbackData, async (ctx) => {
-  ctx.notifyAdmin(`Пользователь заинтересовался покупкой партнерского тарифа: @${ctx.from.username}`)
+  ctx.notifyAdmin(`Пользователь заинтересовался покупкой партнерского тарифа: @${ctx.from.username}`, ctx.from.username)
 
   await ctx.answerCallbackQuery()
   ctx.updateUserState(partnershipBootcampCallbackData)

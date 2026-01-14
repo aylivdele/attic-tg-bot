@@ -7,7 +7,7 @@ const feature = composer.chatType('private')
 
 feature.use(async (ctx, next) => {
   if (ctx.session.userInfo && (ctx.session.userInfo.last_update + 1000 * 60 * 60 * 24) < Date.now()) {
-    ctx.notifyAdmin(`Пользователь восстановил активность в боте: @${ctx.session.userInfo.username}`)
+    ctx.notifyAdmin(`Пользователь восстановил активность в боте: @${ctx.session.userInfo.username}`, ctx.from.username)
   }
   // logger.debug(`Last update of ${ctx.from.username}(${ctx.from.id}) = ${ctx.session.userInfo ?? 'not found'}`)
   await next()

@@ -28,7 +28,7 @@ feature
 
 feature
   .callbackQuery(signalsStatisticsCallbackData, async (ctx) => {
-    ctx.notifyAdmin(`Пользователь изучает статистику сигналов: @${ctx.from.username}`)
+    ctx.notifyAdmin(`Пользователь изучает статистику сигналов: @${ctx.from.username}`, ctx.from.username)
     await ctx.answerCallbackQuery()
     ctx.updateUserState(signalsStatisticsCallbackData)
     return ctx.answerWithMedia(signalsStatisticsCallbackData, `🌟 У нас сейчас работает несколько групп с торговыми сигналами
@@ -76,7 +76,7 @@ const bootcamp3 = `${signalsBootcampCallbackData}3`
 // const bootcamp4 = `${signalsBootcampCallbackData}4`
 
 feature.callbackQuery(signalsBootcampCallbackData, async (ctx) => {
-  ctx.notifyAdmin(`Пользователь заинтересовался покупкой сигналов: @${ctx.from.username}`)
+  ctx.notifyAdmin(`Пользователь заинтересовался покупкой сигналов: @${ctx.from.username}`, ctx.from.username)
 
   await ctx.answerCallbackQuery()
   ctx.updateUserState(signalsBootcampCallbackData)

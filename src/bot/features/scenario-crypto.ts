@@ -33,7 +33,7 @@ const bootcamp3 = `${cryptoBootcampCallbackData}3`
 // const bootcamp4 = `${cryptoBootcampCallbackData}4`
 
 feature.callbackQuery(cryptoBootcampCallbackData, async (ctx) => {
-  ctx.notifyAdmin(`Пользователь заинтересовался покупкой Crypto Course: @${ctx.from.username}`)
+  ctx.notifyAdmin(`Пользователь заинтересовался покупкой Crypto Course: @${ctx.from.username}`, ctx.from.username)
 
   await ctx.answerCallbackQuery()
   ctx.updateUserState(cryptoBootcampCallbackData)
