@@ -4,7 +4,7 @@ import type { Middleware } from 'grammy'
 export function notificationsMiddleware(): Middleware<Context> {
   return async (ctx, next) => {
     const notifyAdmin = (text: string, username?: string): Promise<any> => {
-      if (ctx.config.notificationChat && (!username || !ctx.config.notificationSkipUsernames.includes(username))) {
+      if (ctx.config.notificationChat && (!username || !ctx.config.notificationSkipUsernames.some(u => username.toLowerCase() === u.toLowerCase()))) {
         return ctx.api.sendMessage(ctx.config.notificationChat, text)
       }
       return Promise.resolve()
