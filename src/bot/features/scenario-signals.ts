@@ -11,6 +11,10 @@ feature
   .callbackQuery(scenarioSignalsCallbackData, async (ctx) => {
     await ctx.answerCallbackQuery()
     ctx.updateUserState(scenarioSignalsCallbackData)
+
+    if (ctx.session.userInfo?.previous_state === signalsStatisticsCallbackData) {
+      return ctx.editMessageReplyMarkup({ reply_markup: mainSignalsKeyboard() })
+    }
     return ctx.answerWithMedia(scenarioSignalsCallbackData, `Посмотри видео и узнай: 
 
 — как зарабатывать на сигналах, не разбираясь в графиках
