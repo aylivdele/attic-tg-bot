@@ -115,7 +115,8 @@ feature.callbackQuery(viewCaseContentCallbackData, async (ctx) => {
     return ctx.answerCallbackQuery({ show_alert: true, text: 'Нет несохранённого кейса' })
   }
   await ctx.answerCallbackQuery()
-  await ctx.answerWithMedia(newCase.id.toString(), newCase.caption, { keyboard: await createMainCasesKeyboard(newCase) })
+  await ctx.answerWithMedia(newCase.id.toString(), newCase.caption)
+  await ctx.reply('Выберите дальнейшее действие', { reply_markup: await createMainCasesKeyboard(newCase) })
 })
 
 export { composer as casesFeature }
