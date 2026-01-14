@@ -1,6 +1,6 @@
 import type { Context } from '#root/bot/context.js'
 import type { Middleware } from 'grammy'
-import { getUserById, updateUserInfo } from '#root/database/queries.js'
+import { getUserById, insertNewUser, updateUserInfo } from '#root/database/queries.js'
 import { getClient, pool, query } from '../../database/index.js'
 
 export function dbMiddleware(): Middleware<Context> {
@@ -12,6 +12,10 @@ export function dbMiddleware(): Middleware<Context> {
     }
     if (ctx.from) {
       ctx.session.userInfo = await getUserById(ctx.from.id, ctx.db)
+      if (!ctx.session.userInfo && ctx.update.message?.text !== '/start' && ctx.chat?.type === 'private') {
+        await insertNewUser(ctx.from, ctx.chat.id, ctx.db)
+        ctx.session.userInfo = await getUserById(ctx.from.id, ctx.db)
+      }
     }
 
     const updateUserState = (newState: string) => {
