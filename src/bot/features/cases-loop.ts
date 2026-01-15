@@ -35,17 +35,19 @@ feature.callbackQuery(deleteCaseCallbackData, async (ctx) => {
   }
   ctx.answerCallbackQuery()
   const state = ctx.session.userInfo?.current_state ?? startMenuCallbackData
+  const previousState = ctx.session.userInfo?.previous_state ?? startMenuCallbackData
+
   const parts = state.split('|')
   const section = parts[1]
   const lastCaseId = ctx.session.lastCasesId?.[section]
   if (lastCaseId !== null && lastCaseId !== undefined) {
     return await deleteCaseAndMediaByCaseId(lastCaseId, ctx.db).then(
-      () => ctx.answerWithMedia('', 'Кейс успешно удален', { keyboard: createCaseKeyboard(ctx.callbackQuery.data, state), leaveLastMessage: true }),
+      () => ctx.answerWithMedia('', 'Кейс успешно удален', { keyboard: createCaseKeyboard(state, previousState), leaveLastMessage: true }),
       (reason) => {
         ctx.logger.error(reason)
-        return ctx.answerWithMedia('', 'Ошибка при удалении кейса', { keyboard: createCaseKeyboard(ctx.callbackQuery.data, state), leaveLastMessage: true })
+        return ctx.answerWithMedia('', 'Ошибка при удалении кейса', { keyboard: createCaseKeyboard(state, previousState), leaveLastMessage: true })
       },
     )
   }
-  return ctx.answerWithMedia('', 'Кейс не найден', { keyboard: createCaseKeyboard(ctx.callbackQuery.data, state), leaveLastMessage: true })
+  return ctx.answerWithMedia('', 'Кейс не найден', { keyboard: createCaseKeyboard(state, previousState), leaveLastMessage: true })
 })
