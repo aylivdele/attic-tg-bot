@@ -105,6 +105,15 @@ export function deleteUnsavedCasesByUser(userId: number, db: Database) {
   return db.query('DELETE FROM cases WHERE creater_id = $1 AND bot_id = $2 AND saved = FALSE', [userId, getBotId()])
 }
 
+export async function deleteCaseAndMediaByCaseId(caseId: number, db: Database) {
+  await db.query('DELETE FROM media WHERE message_id = $1', [caseId.toString()])
+  const rowCount = (await db.query('DELETE FROM cases WHERE id = $1', [caseId]))?.rowCount ?? 0
+  if (rowCount > 0) {
+    return true
+  }
+  throw new Error(`Deleted count = 0 for caseId = ${caseId}`)
+}
+
 export function getNextCase(db: Database, section: string, lastCaseId: number = -1): Promise<Case | null> {
   return db.query(
     'SELECT * FROM cases WHERE topic = $1 AND id > $2 AND saved = TRUE AND bot_id = $3 ORDER BY id ASC LIMIT 1',

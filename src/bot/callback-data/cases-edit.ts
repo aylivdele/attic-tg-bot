@@ -12,6 +12,7 @@ export const saveCaseCallbackData = 'save_case'
 export const deleteCaptionCallbackData = 'delete_caption'
 export const deleteMediaCallbackData = 'delete_media'
 export const viewCaseContentCallbackData = 'view_case_content'
+export const deleteCaseCallbackData = 'delete_case'
 
 export function getSectionName(callbackData: string) {
   switch (callbackData) {

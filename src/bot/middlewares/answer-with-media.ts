@@ -19,7 +19,7 @@ async function answerWithMedia(ctx: Context, messageId: string, text?: string | 
   if (ctx.session.userInfo?.previous_state === shortDirectMessageCallbackData && ctx.session.userInfo.current_state?.includes('bootcamp')) {
     return ctx.editMessageText(chooseNextStepMessage, { reply_markup: keyboard })
   }
-  const media = await getMediaForMessage(messageId, ctx.db)
+  const media = messageId ? await getMediaForMessage(messageId, ctx.db) : undefined
   text = text || undefined
 
   let leaveLastMessage = options?.leaveLastMessage
