@@ -25,7 +25,7 @@ feature.callbackQuery(/^cases\|/, logHandle('cases-loop'), async (ctx) => {
   if (nextCase) {
     ctx.session.lastCasesId = ctx.session.lastCasesId || {}
     ctx.session.lastCasesId[section] = nextCase.id
-    await ctx.answerWithMedia(nextCase.id.toString(), nextCase.caption, { keyboard: createCaseKeyboard(ctx.callbackQuery.data, previousState, isAdmin(ctx)), leaveLastMessage: previousState.startsWith('cases|') })
+    await ctx.answerWithMedia(nextCase.id.toString(), nextCase.caption, { keyboard: createCaseKeyboard(ctx.callbackQuery.data, previousState, isAdmin(ctx)), leaveLastMessage: true })
   }
 })
 
@@ -40,12 +40,12 @@ feature.callbackQuery(deleteCaseCallbackData, async (ctx) => {
   const lastCaseId = ctx.session.lastCasesId?.[section]
   if (lastCaseId !== null && lastCaseId !== undefined) {
     return await deleteCaseAndMediaByCaseId(lastCaseId, ctx.db).then(
-      () => ctx.answerCallbackQuery('Кейс успешно удален'),
+      () => ctx.answerWithMedia('', 'Кейс успешно удален', { keyboard: createCaseKeyboard(ctx.callbackQuery.data, state), leaveLastMessage: true }),
       (reason) => {
         ctx.logger.error(reason)
-        return ctx.answerCallbackQuery('Ошибка при удалении кейса')
+        return ctx.answerWithMedia('', 'Ошибка при удалении кейса', { keyboard: createCaseKeyboard(ctx.callbackQuery.data, state), leaveLastMessage: true })
       },
     )
   }
-  return ctx.answerCallbackQuery('Кейс не найден')
+  return ctx.answerWithMedia('', 'Кейс не найден', { keyboard: createCaseKeyboard(ctx.callbackQuery.data, state), leaveLastMessage: true })
 })
