@@ -1,5 +1,5 @@
 import type { Context } from '#root/bot/context.js'
-import { deleteCaptionCallbackData, deleteMediaCallbackData, editCasesCallbackData, editCryptoSchoolCallbackData, editRobotsCallbackData, editSignalsCallbackData, editTradingCourseCallbackData, getSectionName, mapEditCaseCallbackToLoopCallback, saveCaseCallbackData, viewCaseContentCallbackData } from '#root/bot/callback-data/cases-edit.js'
+import { deleteCaptionCallbackData, deleteMediaCallbackData, editCasesCallbackData, editCryptoSchoolCallbackData, editPartnershipCourseCallbackData, editRobotsCallbackData, editSignalsCallbackData, editTradingCourseCallbackData, getSectionName, mapEditCaseCallbackToLoopCallback, saveCaseCallbackData, viewCaseContentCallbackData } from '#root/bot/callback-data/cases-edit.js'
 import { createMainCasesKeyboard, createStartingCasesKeyboard } from '#root/bot/keyboards/cases-keyboard.js'
 import { deleteLastUnsavedCaseMedia, deleteUnsavedCasesByUser, getUnsavedCaseByUser, insertNewCase, saveCaseByUser, updateCaseByUser } from '#root/database/queries.js'
 import { Composer } from 'grammy'
@@ -21,7 +21,7 @@ feature.callbackQuery(editCasesCallbackData, async (ctx) => {
   return ctx.editMessageText(startMessage, { reply_markup: createStartingCasesKeyboard() })
 })
 
-feature.callbackQuery([editRobotsCallbackData, editSignalsCallbackData, editCryptoSchoolCallbackData, editTradingCourseCallbackData], async (ctx) => {
+feature.callbackQuery([editRobotsCallbackData, editSignalsCallbackData, editCryptoSchoolCallbackData, editTradingCourseCallbackData, editPartnershipCourseCallbackData], async (ctx) => {
   await ctx.answerCallbackQuery()
   await deleteUnsavedCasesByUser(ctx.from.id, ctx.db)
   await insertNewCase(mapEditCaseCallbackToLoopCallback(ctx.callbackQuery.data), ctx.from.id, ctx.db)

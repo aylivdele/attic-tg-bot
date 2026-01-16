@@ -1,5 +1,5 @@
 import type { Case } from '#root/database/queries.js'
-import { deleteCaptionCallbackData, deleteCaseCallbackData, deleteMediaCallbackData, editCasesCallbackData, editCryptoSchoolCallbackData, editRobotsCallbackData, editSignalsCallbackData, editTradingCourseCallbackData, saveCaseCallbackData, viewCaseContentCallbackData } from '#root/bot/callback-data/cases-edit.js'
+import { deleteCaptionCallbackData, deleteCaseCallbackData, deleteMediaCallbackData, editCasesCallbackData, editCryptoSchoolCallbackData, editPartnershipCourseCallbackData, editRobotsCallbackData, editSignalsCallbackData, editTradingCourseCallbackData, saveCaseCallbackData, viewCaseContentCallbackData } from '#root/bot/callback-data/cases-edit.js'
 import { InlineKeyboard } from 'grammy'
 
 export function createStartingCasesKeyboard() {
@@ -8,6 +8,7 @@ export function createStartingCasesKeyboard() {
     [{ text: 'Сигналы', callback_data: editSignalsCallbackData }],
     [{ text: 'Крипто-школа', callback_data: editCryptoSchoolCallbackData }],
     [{ text: 'Трейдинг-курс', callback_data: editTradingCourseCallbackData }],
+    [{ text: 'Партнерская сеть', callback_data: editPartnershipCourseCallbackData }],
   ])
 }
 

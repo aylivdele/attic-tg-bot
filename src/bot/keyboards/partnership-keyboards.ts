@@ -1,10 +1,11 @@
-import { partnershipBootcampCallbackData } from '#root/bot/callback-data/callbacks-partnership.js'
+import { partnershipBootcampCallbackData, partnershipCasesCallbackData } from '#root/bot/callback-data/callbacks-partnership.js'
 import { startMenuCallbackData } from '#root/bot/callback-data/callbacks-start.js'
 import { directMessageCallbackData, shortDirectMessageCallbackData } from '#root/bot/callback-data/direct-message.js'
 import { InlineKeyboard } from 'grammy'
 
 export function mainPartnershipKeyboard() {
   return InlineKeyboard.from([
+    [{ text: '🏆 Кейсы', callback_data: `cases|${partnershipCasesCallbackData}` }],
     [{ text: '💎 Попасть в команду', callback_data: partnershipBootcampCallbackData }],
     [{ text: '🚀 В начало', callback_data: startMenuCallbackData }],
     [{ text: '💬 Хочу пообщаться лично', callback_data: directMessageCallbackData }],

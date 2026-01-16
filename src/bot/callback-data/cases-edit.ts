@@ -1,4 +1,5 @@
 import { cryptoCasesCallbackData } from '#root/bot/callback-data/callbacks-crypto.js'
+import { partnershipCasesCallbackData } from '#root/bot/callback-data/callbacks-partnership.js'
 import { robotsCasesCallbackData } from '#root/bot/callback-data/callbacks-robots.js'
 import { signalsCasesCallbackData } from '#root/bot/callback-data/callbacks-signals.js'
 import { tradingCasesCallbackData } from '#root/bot/callback-data/callbacks-trading.js'
@@ -8,6 +9,7 @@ export const editRobotsCallbackData = 'cases_robots'
 export const editSignalsCallbackData = 'cases_signals'
 export const editCryptoSchoolCallbackData = 'cases_crypto_school'
 export const editTradingCourseCallbackData = 'cases_trading_course'
+export const editPartnershipCourseCallbackData = 'cases_partnership_course'
 export const saveCaseCallbackData = 'save_case'
 export const deleteCaptionCallbackData = 'delete_caption'
 export const deleteMediaCallbackData = 'delete_media'
@@ -24,6 +26,8 @@ export function getSectionName(callbackData: string) {
       return 'Крипто-школа'
     case editTradingCourseCallbackData:
       return 'Трейдинг-курс'
+    case editPartnershipCourseCallbackData:
+      return 'Партнерская сеть'
   }
   throw new Error('Неизвестный раздел!')
 }
@@ -38,6 +42,8 @@ export function mapEditCaseCallbackToLoopCallback(callbackData: string) {
       return cryptoCasesCallbackData
     case editTradingCourseCallbackData:
       return tradingCasesCallbackData
+    case editPartnershipCourseCallbackData:
+      return partnershipCasesCallbackData
     default:
       throw new Error('Неизвестный раздел!')
   }
