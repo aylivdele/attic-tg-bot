@@ -1,5 +1,6 @@
 import type { Context } from '#root/bot/context.js'
 import { scenarioTradingCallbackData, tradingBootcampCallbackData, tradingStatisticsCallbackData } from '#root/bot/callback-data/callbacks-trading.js'
+import { getMentionString } from '#root/bot/helpers/mention.js'
 import { mainTradingKeyboard, tradingBootcampKeyboard } from '#root/bot/keyboards/trading-keyboards.js'
 import { Composer } from 'grammy'
 
@@ -9,7 +10,7 @@ const feature = composer.chatType('private')
 
 feature
   .callbackQuery(scenarioTradingCallbackData, async (ctx) => {
-    ctx.notifyAdmin(`Пользователь смотрит про Trading Course: @${ctx.from.username}`, ctx.from.username)
+    ctx.notifyAdmin(`Пользователь смотрит про Trading Course: ${getMentionString(ctx.from)}`, ctx.from.username)
     await ctx.answerCallbackQuery()
     ctx.updateUserState(scenarioTradingCallbackData)
     return ctx.answerWithMedia(scenarioTradingCallbackData, `🎯 TRADING COURSE - Это уже про самостоятельную торговлю на уровне профессии
@@ -35,7 +36,7 @@ const bootcamp3 = `${tradingBootcampCallbackData}3`
 // const bootcamp4 = `${tradingBootcampCallbackData}4`
 
 feature.callbackQuery(tradingBootcampCallbackData, async (ctx) => {
-  ctx.notifyAdmin(`Пользователь заинтересовался покупкой Trading Course: @${ctx.from.username}`, ctx.from.username)
+  ctx.notifyAdmin(`Пользователь заинтересовался покупкой Trading Course: ${getMentionString(ctx.from)}`, ctx.from.username)
 
   await ctx.answerCallbackQuery()
   ctx.updateUserState(tradingBootcampCallbackData)

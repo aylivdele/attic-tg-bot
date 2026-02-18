@@ -1,5 +1,6 @@
 import type { Context } from '#root/bot/context.js'
 import { robotsBootcampCallbackData, robotsStatisticsCallbackData, scenarioRobotsCallbackData, statisticsAIDescription, statisticsMDescription, statisticsRDescription } from '#root/bot/callback-data/callbacks-robots.js'
+import { getMentionString } from '#root/bot/helpers/mention.js'
 import { mainRobotsKeyboard, robotsBootcampKeyboard, robotsStatisticsKeyboard } from '#root/bot/keyboards/robots-keyboards.js'
 import { getMediaForMessage } from '#root/database/queries.js'
 import { Composer } from 'grammy'
@@ -11,7 +12,7 @@ const feature = composer.chatType('private')
 feature
   .callbackQuery(scenarioRobotsCallbackData, async (ctx) => {
     await ctx.answerCallbackQuery()
-    ctx.notifyAdmin(`Пользователь смотрит информацию про торговых роботов: @${ctx.from.username}`, ctx.from.username)
+    ctx.notifyAdmin(`Пользователь смотрит информацию про торговых роботов: ${getMentionString(ctx.from)}`, ctx.from.username)
     ctx.updateUserState(scenarioRobotsCallbackData)
     if (ctx.session.userInfo?.previous_state === robotsStatisticsCallbackData) {
       return ctx.editMessageReplyMarkup({ reply_markup: mainRobotsKeyboard() })
@@ -26,7 +27,7 @@ feature
 
 feature
   .callbackQuery(robotsStatisticsCallbackData, async (ctx) => {
-    ctx.notifyAdmin(`Пользователь изучает статистику алгоритмов: @${ctx.from.username}`, ctx.from.username)
+    ctx.notifyAdmin(`Пользователь изучает статистику алгоритмов: ${getMentionString(ctx.from)}`, ctx.from.username)
 
     await ctx.answerCallbackQuery()
     ctx.updateUserState(robotsStatisticsCallbackData)
@@ -64,7 +65,7 @@ const bootcamp3 = `${robotsBootcampCallbackData}3`
 // const bootcamp4 = `${robotsBootcampCallbackData}4`
 
 feature.callbackQuery(robotsBootcampCallbackData, async (ctx) => {
-  ctx.notifyAdmin(`Пользователь изучает как подключить роботов: @${ctx.from.username}`, ctx.from.username)
+  ctx.notifyAdmin(`Пользователь изучает как подключить роботов: ${getMentionString(ctx.from)}`, ctx.from.username)
   await ctx.answerCallbackQuery()
   ctx.updateUserState(robotsBootcampCallbackData)
   return ctx.answerWithMedia(robotsBootcampCallbackData, `Чтобы получить доступ к торговым роботам, выполни всего несколько шагов 👇

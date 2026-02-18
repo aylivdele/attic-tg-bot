@@ -15,6 +15,7 @@ import { unhandledFeature } from '#root/bot/features/unhandled.js'
 import { cameBackFeature } from '#root/bot/features/update-notification.js'
 import { welcomeFeature } from '#root/bot/features/welcome.js'
 import { errorHandler } from '#root/bot/handlers/error.js'
+import { getMentionString } from '#root/bot/helpers/mention.js'
 import { answerWithMediaMiddleware } from '#root/bot/middlewares/answer-with-media.js'
 import { dbMiddleware } from '#root/bot/middlewares/db.js'
 import { notificationsMiddleware } from '#root/bot/middlewares/notifications.js'
@@ -95,13 +96,15 @@ export function createBot(token: string, dependencies: Dependencies, botConfig?:
   const _interval = setInterval(() => {
     const chatId = config.notificationChat
     if (chatId) {
-      query('UPDATE users SET last_update = 0 WHERE bot_id = $1 and last_update <> 0 and last_update < $2 RETURNING username', [getBotId(), Date.now() - (1000 * 60 * 60 * 24)])
+      query('UPDATE users SET last_update = 0 WHERE bot_id = $1 and last_update <> 0 and last_update < $2 RETURNING *', [getBotId(), Date.now() - (1000 * 60 * 60 * 24)])
         .then((res) => {
           if (!res?.rows) {
             return
           }
           for (const row of res.rows) {
-            bot.api.sendMessage(chatId, `Пользователь сутки не взаимодействовал в боте: @${row.username}`)
+            if ((!row.username || !config.notificationSkipUsernames.some(u => row.username.toLowerCase() === u.toLowerCase()))) {
+              bot.api.sendMessage(chatId, `Пользователь сутки не взаимодействовал в боте: ${getMentionString(row)}`, { parse_mode: 'HTML' })
+            }
           }
         })
     }

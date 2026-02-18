@@ -1,5 +1,6 @@
 import type { Context } from '#root/bot/context.js'
 import { cryptoBootcampCallbackData, cryptoSummaryCallbackData, scenarioCryptoCallbackData } from '#root/bot/callback-data/callbacks-crypto.js'
+import { getMentionString } from '#root/bot/helpers/mention.js'
 import { cryptoBootcampKeyboard, mainCryptoKeyboard } from '#root/bot/keyboards/crypto-keyboards.js'
 import { Composer } from 'grammy'
 
@@ -33,7 +34,7 @@ const bootcamp3 = `${cryptoBootcampCallbackData}3`
 // const bootcamp4 = `${cryptoBootcampCallbackData}4`
 
 feature.callbackQuery(cryptoBootcampCallbackData, async (ctx) => {
-  ctx.notifyAdmin(`Пользователь заинтересовался покупкой Crypto Course: @${ctx.from.username}`, ctx.from.username)
+  ctx.notifyAdmin(`Пользователь заинтересовался покупкой Crypto Course:  ${getMentionString(ctx.from)}`, ctx.from.username)
 
   await ctx.answerCallbackQuery()
   ctx.updateUserState(cryptoBootcampCallbackData)

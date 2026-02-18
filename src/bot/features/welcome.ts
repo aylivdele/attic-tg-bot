@@ -1,6 +1,7 @@
 import type { Context } from '#root/bot/context.js'
 import { startMenuCallbackData } from '#root/bot/callback-data/callbacks-start.js'
 import { logHandle } from '#root/bot/helpers/logging.js'
+import { getMentionString } from '#root/bot/helpers/mention.js'
 import { createStartKeyboard } from '#root/bot/keyboards/start.js'
 import { getMediaForMessage, insertNewUser } from '#root/database/queries.js'
 import { Composer } from 'grammy'
@@ -11,7 +12,7 @@ const feature = composer.chatType('private')
 
 feature.command(startMenuCallbackData, logHandle('command-start'), async (ctx) => {
   if (!ctx.session.userInfo) {
-    ctx.notifyAdmin(`Новый пользователь в боте: @${ctx.from.username}`, ctx.from.username)
+    ctx.notifyAdmin(`Новый пользователь в боте: ${getMentionString(ctx.from)}`, ctx.from.username)
     const media = await getMediaForMessage(`${startMenuCallbackData}_circle`, ctx.db)
     const circle = media?.filter(m => m.media_type === 'videonote')?.[0]
     if (circle) {
